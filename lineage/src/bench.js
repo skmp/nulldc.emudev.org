@@ -16,7 +16,7 @@ export function initBench(V) {
   V.view = async (name) => {
     if (!V.load.meta) await new Promise(r => V.on('meta', r));
     V.fixedQuality = true; V.setQualityStep(0); if (Q.has('scale')) V.quality.scale = +Q.get('scale'); if (Q.has('t0')) V.quality.t0 = +Q.get('t0'); V.flight = null; V.setMarks(null); V.attract && V.attract.stop();
-    V.setPlaying(false); V.presMode = 'clock'; document.getElementById('caption').classList.add('hidden');
+    V.setPlaying(false); V.presMode = 'clock'; V.soloFrame = null; document.getElementById('caption').classList.add('hidden');
     const wall = n => W[lastFrame(n)];
     const opts = {};
     if (name === 'far') { V.setX(V.xMax); const v = V.overview(); V.cam.p = v.p; V.setLook(v.dir); opts.noWalls = true; }
@@ -51,10 +51,34 @@ export function initBench(V) {
       V.presMode = 'gallery'; V.setX(V.xMax + U); const v = V.fitBox(V.wallsBox(fs), dir);
       const bb = V.wallsBox(fs), C = [0, 1, 2].map(i => (bb[0][i] + bb[1][i]) / 2), z = +(Q.get('herozoom') || 1);   // zoom > 1: closer
       V.cam.p = v.p.map((c, i) => C[i] + (c - C[i]) / z); V.setLook(v.dir);
+    } else if (name.startsWith('lanes:')) {   // lanes:A+B+...: each lane's last frame in Clock at the end, oblique from above
+      const fs = name.slice(6).split('+').map(lastFrame).filter(f => W[f]);
+      V.setX(V.xMax); const v = V.fitBox(V.wallsBox(fs), [0.3, -0.75, 0.6]); V.cam.p = v.p; V.setLook(v.dir);
+    } else if (name.startsWith('wall:')) {   // wall:LANE: the lane's last frame, whole, straight on
+      const w = wall(name.slice(5)); V.soloFrame = w.i; V.setX(w.x + 1, { follow: false }); await V.ensureWall(w.i, 60000);
+      const th = Math.tan(V.FOV / 2), asp = innerWidth / innerHeight, wid = w.cols * 128, hgt = 4300;
+      const dist = Math.max(hgt / 2 / th, wid / 2 / (th * asp)) / 0.9;
+      V.cam.p = [w.x - dist, hgt / 2, w.z0 + wid / 2]; V.setLook([1, 0, 0]);
     } else if (name === 'rec') { await V.gotoBookmark('nullDC rec_v1 driver', { instant: true }); }
     const ms = await V.whenReady({ timeout: 90000, ...opts });
     await wait(500);
     return { ms, renderer: V.RENDERER, cam: V.cam.p, X: V.X, stats: { draws: V.stats.draws, inst: V.stats.inst, walls: V.load.walls } };
+  };
+
+  // ---- video stills (tools/verify/run.mjs seq): one frame's wall, whole, in Clock mode at that frame
+  V.framesByDate = () => F.frames.map((fr, i) => [fr.date || '', i]).filter(([, i]) => W[i]).sort((a, b) => a[0].localeCompare(b[0]) || a[1] - b[1]).map(([, i]) => i);
+  V.showFrame = async (f) => {
+    if (!V.load.meta) await new Promise(r => V.on('meta', r));
+    V.fixedQuality = true; V.setQualityStep(0); V.flight = null; V.setMarks(null); V.attract && V.attract.stop();
+    document.getElementById('caption').classList.add('hidden');
+    const w = W[f]; V.soloFrame = f; V.presMode = 'clock'; V.setPlaying(false); V.setX(w.x + 1, { follow: false });
+    const t0 = performance.now(); await V.ensureWall(f, 60000); const tWall = performance.now() - t0;
+    // straight on, centred, the wall (z0 .. z0 + cols * 128 wide, 0 .. 4300 high) at 90 % of the tighter screen dimension
+    const th = Math.tan(V.FOV / 2), asp = innerWidth / innerHeight, wid = w.cols * 128, hgt = 4300;
+    const dist = Math.max(hgt / 2 / th, wid / 2 / (th * asp)) / 0.9;
+    V.cam.p = [w.x - dist, hgt / 2, w.z0 + wid / 2]; V.setLook([1, 0, 0]);
+    const t1 = performance.now(); await V.whenReady({ timeout: 90000 }); const tReady = performance.now() - t1; await wait(250);
+    const fr = F.frames[f]; return { f, lane: fr.lane, date: fr.date, commit: fr.commit, tags: fr.tags || null, ms: { wall: Math.round(tWall), ready: Math.round(tReady) }, want: V.stats.wantQueue };
   };
 
   // ---- scripted paths

@@ -106,7 +106,7 @@
    "frames": {
     "flycast": [
      86,
-     380
+     389
     ]
    }
   },
@@ -125,28 +125,50 @@
    "frames": {
     "nulldc3": [
      182,
-     377
+     383
     ]
    }
   },
   {
-   "title": "nullDC4Wii and NotDC-PS3, 2026",
+   "title": "nullDC4Wii, NotDC-PS3 and nullDC4WiiU, 2026",
    "lanes": [
     "nullDC4Wii",
-    "NotDC-PS3"
+    "NotDC-PS3",
+    "nullDC4WiiU"
    ],
-   "text": "nullDC4Wii imports nullDCe verbatim (2026-01) and ships about 90 tagged alphas; NotDC-PS3 imports nullDC4Wii (2026-09) and later carries plugs/caiqueAICA, a port of the caique-rtl AICA model.",
+   "text": "nullDC4Wii imports nullDCe verbatim (2026-01) and ships about 90 tagged alphas; NotDC-PS3 imports nullDC4Wii (2026-09) and later carries plugs/caiqueAICA, a port of the caique-rtl AICA model. nullDC4WiiU is a git fork of nullDC4Wii at 1459ccb (2026-10-25): from 2026-11-07 a native Wii U (Aroma) port with a GX2 renderer, a JIT with fastmem and a HOME menu, released as v0.800-U1 .. U2.2. It shares no code with nullDC4Wii's own short-lived Wii U attempt (2026-11-13, removed 11-17).",
    "bookmarks": [
-    "NotDC-PS3 caiqueAICA"
+    "NotDC-PS3 caiqueAICA",
+    "nullDC4WiiU Wii U main"
    ],
    "frames": {
     "nullDC4Wii": [
      233,
-     376
+     381
     ],
     "NotDC-PS3": [
      346,
-     369
+     370
+    ],
+    "nullDC4WiiU": [
+     380,
+     388
+    ]
+   }
+  },
+  {
+   "title": "HarissaDC, Xbox 360, 2026",
+   "lanes": [
+    "HarissaDC"
+   ],
+   "text": "A Dreamcast emulator for the Xbox 360 whose credits say it studied nullDC4Wii, nulldc-360 and flycast but did not copy them. The measurements agree: no own file is identical to any lane, and at most 0.5 % of its lines appear in any one lane (under 1 % in all of them together), the same level as unrelated repos. Its source arrives in one dump on 2026-11-03 (v0.2.0).",
+   "bookmarks": [
+    "HarissaDC SH4 PowerPC JIT"
+   ],
+   "frames": {
+    "HarissaDC": [
+     373,
+     382
     ]
    }
   },
@@ -180,28 +202,28 @@
      361
     ],
     "polly2-r8": [
-     379,
-     379
+     387,
+     387
     ],
     "devtools": [
      227,
      362
     ],
     "dreamcast-tests": [
-     378,
-     378
+     384,
+     384
     ],
     "shrike4": [
      352,
-     368
+     369
     ],
     "caique": [
      349,
-     370
+     371
     ],
     "wren7": [
      351,
-     371
+     372
     ]
    }
   }
@@ -231,7 +253,7 @@
    "group": "SH4 interpreter",
    "title": "sh4_opcodes.cpp in nullDC 3 refsw3",
    "lane": "nulldc3",
-   "frame": 377,
+   "frame": 383,
    "date": "2026-11-20",
    "path": "libswirl/hw/sh4/interpr/sh4_opcodes.cpp",
    "line": 189,
@@ -241,7 +263,7 @@
    "group": "SH4 interpreter",
    "title": "sh4_opcodes.cpp in flycast",
    "lane": "flycast",
-   "frame": 380,
+   "frame": 389,
    "date": "2026-11-22",
    "path": "core/hw/sh4/interpr/sh4_opcodes.cpp",
    "line": 0,
@@ -311,7 +333,7 @@
    "group": "SH4 recompiler",
    "title": "nullDC 3 rec_x64",
    "lane": "nulldc3",
-   "frame": 377,
+   "frame": 383,
    "date": "2026-11-20",
    "path": "libswirl/jit/backend/x64/rec_x64.cpp",
    "line": 0,
@@ -331,7 +353,7 @@
    "group": "SH4 recompiler",
    "title": "flycast rec_x64",
    "lane": "flycast",
-   "frame": 380,
+   "frame": 389,
    "date": "2026-11-22",
    "path": "core/rec-x64/rec_x64.cpp",
    "line": 0,
@@ -411,7 +433,7 @@
    "group": "PowerVR",
    "title": "refsw2 tile",
    "lane": "nulldc3",
-   "frame": 364,
+   "frame": 365,
    "date": "2026-10-25",
    "path": "libswirl/rend/refsw2/refsw_tile.cpp",
    "line": 0,
@@ -421,7 +443,7 @@
    "group": "PowerVR",
    "title": "refsw3 refcore tile",
    "lane": "nulldc3",
-   "frame": 377,
+   "frame": 383,
    "date": "2026-11-20",
    "path": "refsw3/refcore/refsw_tile.cpp",
    "line": 0,
@@ -441,7 +463,7 @@
    "group": "FPGA",
    "title": "polly2 r8 ref_copies.h (refsw3 C++ copy)",
    "lane": "polly2-r8",
-   "frame": 379,
+   "frame": 387,
    "date": "2026-11-21",
    "path": "tb/ref/ref_copies.h",
    "line": 0,
@@ -451,7 +473,7 @@
    "group": "FPGA",
    "title": "polly2 r8 ref_copies_setup.h (refsw3 C++ copy)",
    "lane": "polly2-r8",
-   "frame": 379,
+   "frame": 387,
    "date": "2026-11-21",
    "path": "tb/isp_setup/ref_copies_setup.h",
    "line": 0,
@@ -461,7 +483,7 @@
    "group": "FPGA",
    "title": "shrike4 v1_core",
    "lane": "shrike4",
-   "frame": 368,
+   "frame": 369,
    "date": "2026-10-31",
    "path": "rtl/v1/v1_core.sv",
    "line": 0,
@@ -471,7 +493,7 @@
    "group": "FPGA",
    "title": "caique aica_core",
    "lane": "caique",
-   "frame": 370,
+   "frame": 371,
    "date": "2026-11-01",
    "path": "rtl/v1/aica_core.sv",
    "line": 0,
@@ -481,9 +503,29 @@
    "group": "FPGA",
    "title": "wren7 core",
    "lane": "wren7",
-   "frame": 371,
+   "frame": 372,
    "date": "2026-11-01",
    "path": "rtl/v1/wren7_core.sv",
+   "line": 0,
+   "grep": null
+  },
+  {
+   "group": "Ports 2026",
+   "title": "nullDC4WiiU Wii U main",
+   "lane": "nullDC4WiiU",
+   "frame": 388,
+   "date": "2026-11-22",
+   "path": "wiiu/main_wiiu.cpp",
+   "line": 0,
+   "grep": null
+  },
+  {
+   "group": "Ports 2026",
+   "title": "HarissaDC SH4 PowerPC JIT",
+   "lane": "HarissaDC",
+   "frame": 382,
+   "date": "2026-11-20",
+   "path": "src/sh4/sh4_jit.cpp",
    "line": 0,
    "grep": null
   },
@@ -491,7 +533,7 @@
    "group": "Cross-lane copies",
    "title": "NotDC-PS3 caiqueAICA",
    "lane": "NotDC-PS3",
-   "frame": 369,
+   "frame": 370,
    "date": "2026-11-01",
    "path": "plugs/caiqueAICA/aica_model.cpp",
    "line": 0,
@@ -511,7 +553,7 @@
    "group": "Oddities",
    "title": "fsca-table.h (4096 rows)",
    "lane": "nulldc3",
-   "frame": 377,
+   "frame": 383,
    "date": "2026-11-20",
    "path": "libswirl/hw/sh4/fsca-table.h",
    "line": 0,
@@ -521,7 +563,7 @@
    "group": "Oddities",
    "title": "naomi_roms.cpp (longest file)",
    "lane": "flycast",
-   "frame": 380,
+   "frame": 389,
    "date": "2026-11-22",
    "path": "core/hw/naomi/naomi_roms.cpp",
    "line": 0,
@@ -531,7 +573,7 @@
    "group": "Oddities",
    "title": "and here are the new ones :D",
    "lane": "flycast",
-   "frame": 380,
+   "frame": 389,
    "date": "2026-11-22",
    "path": "core/hw/sh4/sh4_opcode_list.cpp",
    "line": 0,
