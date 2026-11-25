@@ -36,7 +36,7 @@
    "frames": {
     "nullDC": [
      15,
-     183
+     189
     ]
    }
   },
@@ -54,7 +54,23 @@
    "frames": {
     "nullDCe": [
      14,
-     204
+     210
+    ]
+   }
+  },
+  {
+   "title": "nullDCe-PSP, the 2021 restoration",
+   "lanes": [
+    "nullDCe-PSP"
+   ],
+   "text": "In 2021 xiro and hlide took nullDCe's recovered archive (39c0550, published 2017) and kept its PSP build. They got it compiling and running again; it was uploaded to PSP-Archive on 2021-02-04. To revive it they pulled small pieces of reicast and flycast into the 2009 core: the FSCA sine table, GD-ROM and SHIL fixes. From June to August 2021 the vbaARM ARM7 and nullAICA sound plugins came over from nullDC and nulldc-360, with reicast's disc image readers and scheduler, flycast's SSA pass and a PSP static register allocator. Work stopped in October 2021, and no code went back into another lane. Origins follow the earliest version of a shared file, so about 380 lines of later Wii, PS3 and Wii U snapshots take the origins this tree gave them first, some of them reicast or flycast colours.",
+   "bookmarks": [
+    "nullDCe-PSP SH4 to MIPS JIT"
+   ],
+   "frames": {
+    "nullDCe-PSP": [
+     146,
+     161
     ]
    }
   },
@@ -70,7 +86,7 @@
    "frames": {
     "nulldc-360": [
      29,
-     161
+     167
     ]
    }
   },
@@ -88,7 +104,7 @@
    "frames": {
     "reicast": [
      42,
-     184
+     190
     ]
    }
   },
@@ -106,7 +122,7 @@
    "frames": {
     "flycast": [
      86,
-     389
+     395
     ]
    }
   },
@@ -124,8 +140,8 @@
    ],
    "frames": {
     "nulldc3": [
-     182,
-     383
+     188,
+     389
     ]
    }
   },
@@ -143,16 +159,16 @@
    ],
    "frames": {
     "nullDC4Wii": [
-     233,
-     381
+     239,
+     387
     ],
     "NotDC-PS3": [
-     346,
-     370
+     352,
+     376
     ],
     "nullDC4WiiU": [
-     380,
-     388
+     386,
+     394
     ]
    }
   },
@@ -167,8 +183,8 @@
    ],
    "frames": {
     "HarissaDC": [
-     373,
-     382
+     379,
+     388
     ]
    }
   },
@@ -194,36 +210,36 @@
    ],
    "frames": {
     "minicast": [
-     211,
-     359
+     217,
+     365
     ],
     "polly2": [
-     304,
-     361
+     310,
+     367
     ],
     "polly2-r8": [
-     387,
-     387
+     393,
+     393
     ],
     "devtools": [
-     227,
-     362
+     233,
+     368
     ],
     "dreamcast-tests": [
-     384,
-     384
+     390,
+     390
     ],
     "shrike4": [
-     352,
-     369
+     358,
+     375
     ],
     "caique": [
-     349,
-     371
+     355,
+     377
     ],
     "wren7": [
-     351,
-     372
+     357,
+     378
     ]
    }
   }
@@ -253,7 +269,7 @@
    "group": "SH4 interpreter",
    "title": "sh4_opcodes.cpp in nullDC 3 refsw3",
    "lane": "nulldc3",
-   "frame": 383,
+   "frame": 389,
    "date": "2026-11-20",
    "path": "libswirl/hw/sh4/interpr/sh4_opcodes.cpp",
    "line": 189,
@@ -263,7 +279,7 @@
    "group": "SH4 interpreter",
    "title": "sh4_opcodes.cpp in flycast",
    "lane": "flycast",
-   "frame": 389,
+   "frame": 395,
    "date": "2026-11-22",
    "path": "core/hw/sh4/interpr/sh4_opcodes.cpp",
    "line": 0,
@@ -323,7 +339,7 @@
    "group": "SH4 recompiler",
    "title": "reicast-last rec_arm (arm32)",
    "lane": "reicast",
-   "frame": 184,
+   "frame": 190,
    "date": "2023-07-10",
    "path": "libswirl/jit/backend/arm32/rec_arm.cpp",
    "line": 0,
@@ -333,7 +349,7 @@
    "group": "SH4 recompiler",
    "title": "nullDC 3 rec_x64",
    "lane": "nulldc3",
-   "frame": 383,
+   "frame": 389,
    "date": "2026-11-20",
    "path": "libswirl/jit/backend/x64/rec_x64.cpp",
    "line": 0,
@@ -343,7 +359,7 @@
    "group": "SH4 recompiler",
    "title": "reicast rec_x64",
    "lane": "reicast",
-   "frame": 184,
+   "frame": 190,
    "date": "2023-07-10",
    "path": "libswirl/jit/backend/x64/rec_x64.cpp",
    "line": 0,
@@ -353,7 +369,7 @@
    "group": "SH4 recompiler",
    "title": "flycast rec_x64",
    "lane": "flycast",
-   "frame": 389,
+   "frame": 395,
    "date": "2026-11-22",
    "path": "core/rec-x64/rec_x64.cpp",
    "line": 0,
@@ -403,7 +419,7 @@
    "group": "PowerVR",
    "title": "nulldc-360 xenosRend",
    "lane": "nulldc-360",
-   "frame": 161,
+   "frame": 167,
    "date": "2022-02-11",
    "path": "plugins/drkPvr/xenosRend.cpp",
    "line": 0,
@@ -423,7 +439,7 @@
    "group": "PowerVR",
    "title": "refsw (nullDC 3 2023)",
    "lane": "nulldc3",
-   "frame": 182,
+   "frame": 188,
    "date": "2023-07-07",
    "path": "libswirl/rend/soft/refsw.cpp",
    "line": 0,
@@ -433,7 +449,7 @@
    "group": "PowerVR",
    "title": "refsw2 tile",
    "lane": "nulldc3",
-   "frame": 365,
+   "frame": 371,
    "date": "2026-10-25",
    "path": "libswirl/rend/refsw2/refsw_tile.cpp",
    "line": 0,
@@ -443,7 +459,7 @@
    "group": "PowerVR",
    "title": "refsw3 refcore tile",
    "lane": "nulldc3",
-   "frame": 383,
+   "frame": 389,
    "date": "2026-11-20",
    "path": "refsw3/refcore/refsw_tile.cpp",
    "line": 0,
@@ -453,7 +469,7 @@
    "group": "FPGA",
    "title": "polly2 r6b peel_core",
    "lane": "polly2",
-   "frame": 361,
+   "frame": 367,
    "date": "2026-10-24",
    "path": "polly2-core/rtl/peel_core.sv",
    "line": 0,
@@ -463,7 +479,7 @@
    "group": "FPGA",
    "title": "polly2 r8 ref_copies.h (refsw3 C++ copy)",
    "lane": "polly2-r8",
-   "frame": 387,
+   "frame": 393,
    "date": "2026-11-21",
    "path": "tb/ref/ref_copies.h",
    "line": 0,
@@ -473,7 +489,7 @@
    "group": "FPGA",
    "title": "polly2 r8 ref_copies_setup.h (refsw3 C++ copy)",
    "lane": "polly2-r8",
-   "frame": 387,
+   "frame": 393,
    "date": "2026-11-21",
    "path": "tb/isp_setup/ref_copies_setup.h",
    "line": 0,
@@ -483,7 +499,7 @@
    "group": "FPGA",
    "title": "shrike4 v1_core",
    "lane": "shrike4",
-   "frame": 369,
+   "frame": 375,
    "date": "2026-10-31",
    "path": "rtl/v1/v1_core.sv",
    "line": 0,
@@ -493,7 +509,7 @@
    "group": "FPGA",
    "title": "caique aica_core",
    "lane": "caique",
-   "frame": 371,
+   "frame": 377,
    "date": "2026-11-01",
    "path": "rtl/v1/aica_core.sv",
    "line": 0,
@@ -503,9 +519,19 @@
    "group": "FPGA",
    "title": "wren7 core",
    "lane": "wren7",
-   "frame": 372,
+   "frame": 378,
    "date": "2026-11-01",
    "path": "rtl/v1/wren7_core.sv",
+   "line": 0,
+   "grep": null
+  },
+  {
+   "group": "Ports 2021",
+   "title": "nullDCe-PSP SH4 to MIPS JIT",
+   "lane": "nullDCe-PSP",
+   "frame": 161,
+   "date": "2021-10-17",
+   "path": "psp/dc/sh4/rec_v2/psp_driver.cpp",
    "line": 0,
    "grep": null
   },
@@ -513,7 +539,7 @@
    "group": "Ports 2026",
    "title": "nullDC4WiiU Wii U main",
    "lane": "nullDC4WiiU",
-   "frame": 388,
+   "frame": 394,
    "date": "2026-11-22",
    "path": "wiiu/main_wiiu.cpp",
    "line": 0,
@@ -523,7 +549,7 @@
    "group": "Ports 2026",
    "title": "HarissaDC SH4 PowerPC JIT",
    "lane": "HarissaDC",
-   "frame": 382,
+   "frame": 388,
    "date": "2026-11-20",
    "path": "src/sh4/sh4_jit.cpp",
    "line": 0,
@@ -533,7 +559,7 @@
    "group": "Cross-lane copies",
    "title": "NotDC-PS3 caiqueAICA",
    "lane": "NotDC-PS3",
-   "frame": 370,
+   "frame": 376,
    "date": "2026-11-01",
    "path": "plugs/caiqueAICA/aica_model.cpp",
    "line": 0,
@@ -543,7 +569,7 @@
    "group": "Cross-lane copies",
    "title": "devtools aica_dsp_playground dsp.h",
    "lane": "devtools",
-   "frame": 362,
+   "frame": 368,
    "date": "2026-10-24",
    "path": "experiments/aica_dsp_playground/dsp/dsp.h",
    "line": 0,
@@ -553,7 +579,7 @@
    "group": "Oddities",
    "title": "fsca-table.h (4096 rows)",
    "lane": "nulldc3",
-   "frame": 383,
+   "frame": 389,
    "date": "2026-11-20",
    "path": "libswirl/hw/sh4/fsca-table.h",
    "line": 0,
@@ -563,7 +589,7 @@
    "group": "Oddities",
    "title": "naomi_roms.cpp (longest file)",
    "lane": "flycast",
-   "frame": 389,
+   "frame": 395,
    "date": "2026-11-22",
    "path": "core/hw/naomi/naomi_roms.cpp",
    "line": 0,
@@ -573,7 +599,7 @@
    "group": "Oddities",
    "title": "and here are the new ones :D",
    "lane": "flycast",
-   "frame": 389,
+   "frame": 395,
    "date": "2026-11-22",
    "path": "core/hw/sh4/sh4_opcode_list.cpp",
    "line": 0,
