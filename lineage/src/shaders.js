@@ -179,7 +179,7 @@ void main() {
   uint k = aW.y & 3u, push = (aW.y >> 2) & 3u;
   vec4 W = wallOf(aW.x);
   float wa = W.y * uMul;
-  if ((aW.y & 32u) != 0u && W.z < 0.5) wa = 0.;
+  if ((aW.y & 32u) != 0u && W.z <= 0.) wa = 0.;   // plates: none on ghosts (z 0); z PLATE_FADE: a fading plate (drawn blended at its alpha)
   if (k == 2u) wa *= (aW.y & 128u) != 0u ? float(W.w == 3.) : (aW.y & 64u) != 0u ? float(W.w == 2.) : float(W.w == 1.);   // T3 file quads / T4 column strips: only on walls drawn that way
   if (wa <= 0.) { gl_Position = vec4(2., 2., 2., 1.); return; }
   vec3 p;
