@@ -45,10 +45,10 @@ export function initBench(V) {
       V.setX(w.x + 1); await V.ensureWall(w.i); V.setMarks([it.id]);
       const v = V.slotView(w, V.slotOf(w, st[1]), st[2] + 1, 22); V.cam.p = v.p; V.setLook(v.dir); V.attract.caption(it, st);
       document.body.classList.add('attract');   // as in a real tour: panels faded, the caption alone
-    } else if (name === 'hero') {   // og:image: Gallery (every frame solid), walls from ?heroy= (default 2016) on, wide oblique shot
+    } else if (name === 'hero') {   // og:image: every frame solid (Clock at the end), walls from ?heroy= (default 2016) on, wide oblique shot
       const y0 = Q.get('heroy') || '2016', dir = (Q.get('herodir') || '0.55,-0.42,0.72').split(',').map(Number);
       const fs = WALLS.filter(w => (F.frames[w.i].date || '') >= y0).map(w => w.i);
-      V.presMode = 'gallery'; V.setX(V.xMax + U); const v = V.fitBox(V.wallsBox(fs), dir);
+      V.presMode = 'clock'; V.setX(V.xMax + U); const v = V.fitBox(V.wallsBox(fs), dir);
       const bb = V.wallsBox(fs), C = [0, 1, 2].map(i => (bb[0][i] + bb[1][i]) / 2), z = +(Q.get('herozoom') || 1);   // zoom > 1: closer
       V.cam.p = v.p.map((c, i) => C[i] + (c - C[i]) / z); V.setLook(v.dir);
     } else if (name.startsWith('lanes:')) {   // lanes:A+B+...: each lane's last frame in Clock at the end, oblique from above
@@ -82,14 +82,14 @@ export function initBench(V) {
   };
 
   // ---- scripted paths
-  async function pathA() {   // a famous file through the frames that hold it (gallery)
+  async function pathA() {   // a famous file through the frames that hold it (every frame, Clock at the end)
     const it = (V.attract.items || []).find(i => i.kind === 'file' && /interpreter/.test(i.title)) || V.attract.items.find(i => i.kind === 'file');
     const keys = it.stops.map(([f, ident]) => { const w = W[f]; return V.slotView(w, V.slotOf(w, ident), 0, 9).p; });
-    V.presMode = 'gallery'; V.setX(V.xMax + U);
+    V.presMode = 'clock'; V.setX(V.xMax + U);
     return t => { const x = t * (keys.length - 1), i = Math.min(keys.length - 2, Math.floor(x)), f = smooth(x - i); V.cam.p = lerp(keys[i], keys[i + 1], f); V.setLook([1, -0.05, 0.03]); };
   }
-  const pathB = async () => { V.presMode = 'gallery'; V.setX(V.xMax + U); return t => { const a = t * Math.PI * 2, c = [(V.xMin + V.xMax) / 2, 0, zMax / 2]; lookAt([c[0] - Math.cos(a) * 520000, 260000, c[2] + Math.sin(a) * 300000], c); }; };
-  const pathC = async () => { V.presMode = 'gallery'; V.setX(V.xMax + U); const lanes = ['nullDC', 'reicast', 'flycast', 'nulldc3', 'nullDC4Wii'].map(laneByName);
+  const pathB = async () => { V.presMode = 'clock'; V.setX(V.xMax + U); return t => { const a = t * Math.PI * 2, c = [(V.xMin + V.xMax) / 2, 0, zMax / 2]; lookAt([c[0] - Math.cos(a) * 520000, 260000, c[2] + Math.sin(a) * 300000], c); }; };
+  const pathC = async () => { V.presMode = 'clock'; V.setX(V.xMax + U); const lanes = ['nullDC', 'reicast', 'flycast', 'nulldc3', 'nullDC4Wii'].map(laneByName);
     return t => { const passes = lanes.length, x = t * passes, i = Math.min(passes - 1, Math.floor(x)), f = x - i, L = lanes[i];
       V.cam.p = [L.xs[0] - 6000 + f * (L.xs.at(-1) - L.xs[0] + 8000), 3000, L.z0 + L.L.width / 2 - 1500]; V.setLook([1, -0.06, 0.02]); }; };
   const pathD = async () => { const w = W[lastFrame('nulldc3')]; V.presMode = 'clock'; V.setX(V.xMax + U); const d = V.readDist(12);

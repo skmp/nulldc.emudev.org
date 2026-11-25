@@ -82,9 +82,9 @@ export function initUI(V) {
   function timeUI() {
     if (document.activeElement !== slider) slider.value = String(Math.round(V.X));
     $('tplay').textContent = V.playing ? '❚❚' : '▶'; $('tplay').classList.toggle('on', V.playing);
-    $('tpres').textContent = { clock: 'Clock', now: 'Now', gallery: 'Gallery' }[V.presMode]; $('tpres').classList.toggle('on', V.presMode !== 'clock');
+    $('tpres').textContent = V.pres() === 'now' ? 'Now' : 'Clock'; $('tpres').classList.toggle('on', V.presMode === 'now');
     const d = fmtDate(V.X), rel = rels.filter(w => Math.abs(w.x - V.X) < U * 0.5).map(w => w.releaseLabel).filter(Boolean);
-    $('tdate').textContent = `${d}  ${{ clock: '(frames at the clock)', now: '(live walls)', gallery: '(every frame)' }[V.pres()]}${rel.length ? '  ' + [...new Set(rel)].slice(0, 2).join(', ') : ''}`;
+    $('tdate').textContent = `${d}  ${V.pres() === 'now' ? '(live walls)' : V.ALLF ? '(every frame; the clock picks the frame in focus)' : '(frames at the clock)'}${rel.length ? '  ' + [...new Set(rel)].slice(0, 2).join(', ') : ''}`;
     drawTicks(); legend();
   }
   // the clock moves every frame while playing: repaint the DOM / canvas parts at most ~6 times a second (software
@@ -258,7 +258,7 @@ export function initUI(V) {
     const w = nearestWall(); if (!w) return;
     const ln = LN[w.lane], k = ln.frames.indexOf(w.i) + d; if (k < 0 || k >= ln.frames.length) return;
     const w2 = W[ln.frames[k]], dx = V.cam.p[0] - V.dispX(w);
-    if (V.pres() === 'gallery') { V.cam.p[0] = w2.x + dx; V.emit('time'); } else { V.setX(w2.x + 1, { follow: false }); if (V.pres() === 'clock') V.cam.p[0] = w2.x + dx; }
+    V.setX(w2.x + 1, { follow: false }); if (V.pres() === 'clock') V.cam.p[0] = w2.x + dx;
   }
   V.on('key', e => {
     const k = e.key;
@@ -289,7 +289,7 @@ export function initUI(V) {
     const h = new URLSearchParams(location.hash.slice(1)); if (!h.has('c')) return false;
     const c = h.get('c').split(',').map(Number), yp = (h.get('yp') || '0,0').split(',').map(Number);
     if (c.length !== 3 || c.some(isNaN)) return false;
-    V.cam.p = c; V.cam.yaw = yp[0]; V.cam.pitch = yp[1]; if (h.has('x')) V.X = +h.get('x'); if (h.has('m')) setMode(+h.get('m')); if (['clock', 'now', 'gallery'].includes(h.get('pm'))) V.presMode = h.get('pm');
+    V.cam.p = c; V.cam.yaw = yp[0]; V.cam.pitch = yp[1]; if (h.has('x')) V.X = +h.get('x'); if (h.has('m')) setMode(+h.get('m')); if (['clock', 'now', 'gallery'].includes(h.get('pm'))) V.presMode = h.get('pm') === 'now' ? 'now' : 'clock';   // Gallery merged into Clock
     return true;
   };
   setMode(0); timeUI(); hud();
