@@ -45,6 +45,12 @@ export function initBench(V) {
       V.setX(w.x + 1); await V.ensureWall(w.i); V.setMarks([it.id]);
       const v = V.slotView(w, V.slotOf(w, st[1]), st[2] + 1, 22); V.cam.p = v.p; V.setLook(v.dir); V.attract.caption(it, st);
       document.body.classList.add('attract');   // as in a real tour: panels faded, the caption alone
+    } else if (name === 'hero') {   // og:image: Gallery (every frame solid), walls from ?heroy= (default 2016) on, wide oblique shot
+      const y0 = Q.get('heroy') || '2016', dir = (Q.get('herodir') || '0.55,-0.42,0.72').split(',').map(Number);
+      const fs = WALLS.filter(w => (F.frames[w.i].date || '') >= y0).map(w => w.i);
+      V.presMode = 'gallery'; V.setX(V.xMax + U); const v = V.fitBox(V.wallsBox(fs), dir);
+      const bb = V.wallsBox(fs), C = [0, 1, 2].map(i => (bb[0][i] + bb[1][i]) / 2), z = +(Q.get('herozoom') || 1);   // zoom > 1: closer
+      V.cam.p = v.p.map((c, i) => C[i] + (c - C[i]) / z); V.setLook(v.dir);
     } else if (name === 'rec') { await V.gotoBookmark('nullDC rec_v1 driver', { instant: true }); }
     const ms = await V.whenReady({ timeout: 90000, ...opts });
     await wait(500);
