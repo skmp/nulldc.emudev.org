@@ -700,6 +700,10 @@ function updateDisplay() {
   wallArr[4 * CLOCK] = V.X; wallArr[4 * CLOCK + 1] = 1; wallArr[4 * CLOCK + 2] = 1;
   V.morph = null; live.length = 0;
   const pres = V.pres(), now = pres === 'now', X = V.X;
+  if (V.soloFrame != null && W[V.soloFrame]) {   // dev / video stills: one frame's wall alone, solid at its X
+    const f = V.soloFrame, o = 4 * f; wallArr[o] = W[f].x; wallArr[o + 1] = 1; wallArr[o + 2] = 1; live.push({ lane: W[f].lane, f, x: W[f].x, morph: null });
+    dispList = [W[f]]; wallTexI = (wallTexI + 1) % wallTexRing.length; wallTex = wallTexRing[wallTexI]; uploadWallTex(); return;
+  }
   for (const ln of LN) {
     const k = lb(ln.xs, X + 1e-3);
     if (pres === 'gallery') { for (const f of ln.frames) { const o = 4 * f; wallArr[o] = W[f].x; wallArr[o + 1] = 1; wallArr[o + 2] = 1; } continue; }
