@@ -552,7 +552,7 @@ V.lineText = ids => new Promise(res => { const req = ++reqN; reqs.set(req, m => 
 V.search = (q, opts) => new Promise(res => { const req = ++reqN; reqs.set(req, res); tw.postMessage({ type: 'search', req, q, ...opts }); });
 V.locate = (id, frames) => new Promise(res => { const req = ++reqN; reqs.set(req, res); fw.postMessage({ type: 'locate', req, id, frames }); });
 let marksOn = false;
-V.setMarks = (ids) => { if (!ids && !marksOn) return; marksOn = !!ids; markArr.fill(0); if (ids) for (const i of ids) markArr[i] = 1;
+V.setMarks = (ids, v = 1) => { if (!ids && !marksOn) return; marksOn = !!ids; markArr.fill(0); if (ids) for (const i of ids) markArr[i] = v;   // v: 1 gold (tour), 2 violet (unique to one lineage)
   gl.bindTexture(gl.TEXTURE_2D, markTex); gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, LW, LH, gl.RED_INTEGER, gl.UNSIGNED_BYTE, markArr); invalidateImpostors(); };
 const pendingMorph = new Set();
 function requestMorph(a, b) {

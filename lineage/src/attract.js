@@ -18,7 +18,7 @@ export function initAttract(V) {
   V.attractOn = false; V.attractArc = 0;
   const sleep = ms => new Promise(r => setTimeout(r, ms));
   // smooth camera: ease in-out position and direction, lifted when the move is long (crossing lanes / years)
-  function glide(p1, d1, dur, token) {
+  function glide(p1, d1, dur, token, atApex = null) {   // atApex: run once at the top of the flight (s >= 0.5), when the scene is farthest away
     return new Promise(res => {
       const c = V.cam, p0 = c.p.slice(), d0 = V.camBasis().f, dist = Math.hypot(p1[0] - p0[0], p1[1] - p0[1], p1[2] - p0[2]);
       const lift = Math.min(dist * 0.28, 50000), t0 = performance.now();
@@ -26,6 +26,7 @@ export function initAttract(V) {
       const tick = () => {
         if (token !== run) { V.off('tick', tick); return res(false); }
         const t = Math.min(1, (performance.now() - t0) / (dur * 1000)), s = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+        if (atApex && s >= 0.5) { const f = atApex; atApex = null; f(); }
         const p = p0.map((v, i) => v + (p1[i] - v) * s); p[1] += Math.sin(Math.PI * s) * lift;
         V.cam.p = p; V.setLook(n(d0.map((v, i) => v + (d1[i] - v) * s)));
         if (t >= 1) { V.off('tick', tick); res(true); }
@@ -41,12 +42,16 @@ export function initAttract(V) {
   }
   function caption(it, stop) {
     const fr = F.frames[stop[0]], lane = fr.lane;
-    let h;
+    let h = it.unique ? `<div class="uq">unique: only ever in ${esc(it.lanes[0])}</div>` : '';
     if (it.kind === 'line') {
-      h = `<div class="cl">${esc(it.text)}</div><div class="cm">first seen in <b>${esc(it.origin_lane)}</b> ${esc(it.origin_date)}; ` +
-        `held by ${it.frames} frames in ${it.lanes.length} lanes (${esc(it.lanes.join(', '))})</div>`;
-    } else h = `<div class="cl">${esc(it.title)}</div><div class="cm">${it.frames} frames in ${it.lanes.length} lanes (${esc(it.lanes.join(', '))}), since ${esc(it.first_date)}</div>`;
-    h += `<div class="cm">now: ${esc(lane)} ${esc(fr.date)}${fr.tags ? ' ' + esc(fr.tags.join(', ')) : ''}${it.note ? ' | ' + esc(it.note) : ''}</div>`;
+      h += `<div class="cl">${esc(it.text)}</div><div class="cm">first seen in <b>${esc(it.origin_lane)}</b> ${esc(it.origin_date)}; ` +
+        (it.unique ? `held by ${it.frames} frames` : `held by ${it.frames} frames in ${it.lanes.length} lanes (${esc(it.lanes.join(', '))})`) + `</div>`;
+    } else if (it.kind === 'segment') {
+      h += `<div class="ct">${esc(it.title)}</div><div class="cm">${it.n} lines, first seen in <b>${esc(it.origin_lane)}</b> ${esc(it.origin_date)}; ` +
+        (it.unique ? `held by ${it.frames} frames` : `held by ${it.frames} frames in ${it.lanes.length} lanes (${esc(it.lanes.join(', '))})`) + `</div>`;
+    } else h += `<div class="cl">${esc(it.title)}</div><div class="cm">${it.frames} frames in ${it.lanes.length} lanes (${esc(it.lanes.join(', '))}), since ${esc(it.first_date)}</div>`;
+    if (it.note && it.picked) h += `<div class="nt">${esc(it.note)}</div>`;
+    h += `<div class="cm">now: ${esc(lane)} ${esc(fr.date)}${fr.tags ? ' ' + esc(fr.tags.join(', ')) : ''}${it.note && !it.picked ? ' | ' + esc(it.note) : ''}</div>`;
     cap.innerHTML = h; cap.classList.remove('hidden'); cap.style.opacity = 1;
   }
   // order: random on every load and every lap. Curated and computed items are shuffled separately, then merged with a
@@ -63,23 +68,35 @@ export function initAttract(V) {
     const a = s[0], b = s[Math.floor(s.length * 0.45)], c = s[s.length - 1], d = s[Math.floor(s.length * 0.75)];
     return [...new Set([a, b, c, d])];
   }
+  // reading view of an item. Segments: the whole block in the top 60 % of the screen (the caption sits under it): line
+  // height from the block length, and the view centred below the block's middle so the block lands at 36 % of the height
+  function itemView(it, w, s, line) {
+    if (it.kind === 'line') return V.slotView(w, s, line + 1, 22);
+    if (it.kind !== 'segment') return V.slotView(w, s, 0, 14);
+    const px = Math.max(9, Math.min(22, Math.floor(innerHeight * 0.6 / (it.n + 2))));
+    return V.slotView(w, s, line + 1 + Math.round(it.n / 2 + 0.14 * innerHeight / px), px);
+  }
   async function visit(it, token) {
-    if (it.kind === 'line') V.setMarks([it.id]); else V.setMarks(null);
-    for (const [q, stop] of route(it).entries()) {
+    if (it.kind === 'line') V.setMarks([it.id], it.unique ? 2 : 1); else if (it.kind === 'segment') V.setMarks(it.marks || it.ids, it.unique ? 2 : 1); else V.setMarks(null);
+    const stops = route(it).filter(st => W[st[0]]);
+    // one caption for the whole item: shown as the visit starts, its "now:" line updated per stop, faded when the item ends
+    if (stops.length) caption(it, stops[0]);
+    for (const [q, stop] of stops.entries()) {
       if (token !== run) return;
-      const [f, ident, line] = stop, w = W[f]; if (!w) continue;
-      V.presMode = 'clock'; V.setPlaying(false); V.setX(w.x + 1, { follow: false });
-      V.attractArc = 0.4 + 0.6 * (q / 4);
+      const [f, ident, line] = stop, w = W[f];
       const s = V.slotOf(w, ident); if (s === undefined) continue;
+      V.attractArc = 0.4 + 0.6 * (q / 4);
+      V.ensureWall(f, 15000);   // build the target wall while flying, not on arrival
+      // the clock moves to the target frame at the top of the flight, not as the camera leaves the wall it was reading
+      const toClock = () => { V.presMode = 'clock'; V.setPlaying(false); V.setX(w.x + 1, { follow: false }); if (q) caption(it, stop); };
+      if (q === 0) toClock();
       // establishing shot of the wall, then in to reading range
-      const v0 = V.fitWall(w); if (!await glide(v0.p.map((x, i) => i === 0 ? x : x), [1, -0.08, 0.05], q === 0 ? 5 : 4, token)) return;
-      V.ensureWall(f, 15000);
-      const v = V.slotView(w, s, it.kind === 'line' ? line + 1 : 0, it.kind === 'line' ? 22 : 14);
+      const v0 = V.fitWall(w); if (!await glide(v0.p, [1, -0.08, 0.05], q === 0 ? 5 : 4, token, q ? toClock : null)) return;
+      const v = itemView(it, w, s, line);
       if (!await glide(v.p, v.dir, 4.5, token)) return;
-      caption(it, stop);
       if (!await hold(q === 0 ? 6500 : 4500, token)) return;
-      cap.style.opacity = 0.0;
     }
+    cap.style.opacity = 0.0;
   }
   async function loop(token) {
     document.body.classList.add('attract'); V.attractOn = true;
@@ -107,7 +124,16 @@ export function initAttract(V) {
   let acted = false;
   V.on('input', (e) => { lastInput = performance.now(); if (e && e.type === 'mousemove') return; acted = true; if (V.attractOn && performance.now() - startedAt > 400) stop(); });
   setInterval(() => { if (!REDUCE && !V.attractOn && !V.bench && !QUIET && IDLE > 0 && performance.now() - lastInput > IDLE) start('idle'); }, 1000);
-  V.attract = { start, stop, items, caption, route, get on() { return V.attractOn; }, reduce: REDUCE };
+  // screenshots / checks: an item's first stop, placed instantly as the tour would frame it
+  async function showItem(it, k = 0) {
+    const [f, ident, line] = it.stops[k], w = W[f], sl = V.slotOf(w, ident);
+    V.presMode = 'clock'; V.setPlaying(false); V.setX(w.x + 1, { follow: false }); await V.ensureWall(f, 30000);
+    if (it.kind === 'line') V.setMarks([it.id], it.unique ? 2 : 1); else if (it.kind === 'segment') V.setMarks(it.marks || it.ids, it.unique ? 2 : 1);
+    const v = itemView(it, w, sl, line);
+    V.cam.p = v.p; V.setLook(v.dir); caption(it, it.stops[k]);
+    await V.whenReady({ timeout: 60000 });
+  }
+  V.attract = { start, stop, items, caption, route, showItem, get on() { return V.attractOn; }, reduce: REDUCE };
   if (V.Q.has('attract')) setTimeout(() => start('url'), 1500);
 
   // ---- tour on load + the audio gate

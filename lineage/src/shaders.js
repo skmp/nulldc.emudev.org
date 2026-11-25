@@ -160,6 +160,7 @@ void main() {
   vec4 res = vec4(c * cov, cov);
   if (vHi > 0.) res = vec4(res.rgb * 1.25, res.a) + vec4(0.10, 0.12, 0.16, 0.2) * (1. - res.a);
   if ((mk & 1u) != 0u) res = vec4(mix(res.rgb, vec3(1., 0.9, 0.2) * res.a, 0.6), res.a) + vec4(0.45, 0.38, 0.0, 0.5) * (1. - res.a);
+  if ((mk & 2u) != 0u) res = vec4(mix(res.rgb, vec3(0.85, 0.6, 1.) * res.a, 0.6), res.a) + vec4(0.34, 0.16, 0.5, 0.5) * (1. - res.a);   // unique to one lineage
   if (res.a < 0.004) discard;
   oC = res;
 }`;
