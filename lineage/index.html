@@ -25,6 +25,7 @@
   canvas#gl { position: fixed; inset: 0; width: 100vw; height: 100vh; display: block; cursor: crosshair; }
   .panel { position: fixed; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 7px 10px; box-shadow: 0 4px 18px rgba(0,0,0,.4); }
   .hidden { display: none !important; }
+  .panel a { color: var(--acc); }
   #hud { left: 8px; bottom: 96px; font: 11px/1.35 ui-monospace, "DejaVu Sans Mono", monospace; white-space: pre; pointer-events: none; max-width: 330px; padding: 4px 8px; opacity: .92; }
   #hud b { color: var(--acc); font-weight: normal; }
   #legend { top: 8px; right: 8px; width: 260px; max-height: calc(100vh - 130px); overflow: auto; }
@@ -142,6 +143,7 @@
     <tr><td>/  B  I  L  H</td><td>search, bookmarks, minimap, lineage panel, this help</td></tr>
   </table>
   <p class="small">Frames: the last commit of every month with commits, plus every release, tag, DreamSTer pin, fork and import point. dc4ever's dates are approximate (its git history is a 2019 rebuild). nullDC, nullDCe, reicast and nullDC 3 were started by drk||Raziel (GitHub skmp; said "D R K Raziel"); the colours show where each line first appeared, not who wrote it. Text: DejaVu Sans Mono, high-resolution SDF. Score: original, synthesised in the browser.</p>
+  <p class="small">The dc4ever lineage: source, data and tools at <a href="https://github.com/skmp/dc4ever-lineage" target="_blank" rel="noopener">github.com/skmp/dc4ever-lineage</a>.</p>
 </div>
 <script type="module" src="src/main.js"></script>
 </body>
