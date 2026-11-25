@@ -49,11 +49,13 @@ export function initAttract(V) {
     h += `<div class="cm">now: ${esc(lane)} ${esc(fr.date)}${fr.tags ? ' ' + esc(fr.tags.join(', ')) : ''}${it.note ? ' | ' + esc(it.note) : ''}</div>`;
     cap.innerHTML = h; cap.classList.remove('hidden'); cap.style.opacity = 1;
   }
-  // order: curated first, then the rest shuffled; files interleaved
+  // order: random on every load and every lap. Curated and computed items are shuffled separately, then merged with a
+  // lean towards the curated ones (picked 60 % of the time while both remain), so the famous lines still come early
+  const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
   function playlist() {
-    const cur = items.filter(i => i.curated), rest = items.filter(i => !i.curated);
-    for (let i = rest.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [rest[i], rest[j]] = [rest[j], rest[i]]; }
-    return [...cur, ...rest];
+    const cur = shuffle(items.filter(i => i.curated)), rest = shuffle(items.filter(i => !i.curated)), out = [];
+    while (cur.length || rest.length) out.push((cur.length && (!rest.length || Math.random() < 0.6) ? cur : rest).shift());
+    return out;
   }
   // stop sequence for an item: forward in time, then back to a middle one (back and forth), at most 5 stops
   function route(it) {
