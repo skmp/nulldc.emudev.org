@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>nullDC lineage: 380 frames of code through time</title>
+<style>
+  :root { --bg: #0b0d12; --panel: rgba(16, 19, 27, 0.9); --line: #262c3a; --fg: #d7dce6; --dim: #8b93a6; --acc: #7cc4ff; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--fg); font: 13px/1.35 system-ui, -apple-system, "Segoe UI", sans-serif; overflow: hidden; }
+  canvas#gl { position: fixed; inset: 0; width: 100vw; height: 100vh; display: block; cursor: crosshair; }
+  .panel { position: fixed; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 7px 10px; box-shadow: 0 4px 18px rgba(0,0,0,.4); }
+  .hidden { display: none !important; }
+  #hud { left: 8px; bottom: 96px; font: 11px/1.35 ui-monospace, "DejaVu Sans Mono", monospace; white-space: pre; pointer-events: none; max-width: 330px; padding: 4px 8px; opacity: .92; }
+  #hud b { color: var(--acc); font-weight: normal; }
+  #legend { top: 8px; right: 8px; width: 260px; max-height: calc(100vh - 130px); overflow: auto; }
+  h3 { margin: 0 0 6px; font-size: 13px; color: var(--acc); font-weight: 600; }
+  .modes { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 6px; }
+  button, select, input { background: #1a2030; color: var(--fg); border: 1px solid #333c52; border-radius: 5px; padding: 3px 7px; font: inherit; }
+  button:hover { border-color: var(--acc); } button.on { background: #24406a; border-color: var(--acc); }
+  .sw { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 2px; vertical-align: -1px; }
+  .lrow { display: flex; align-items: center; gap: 4px; margin: 2px 0; font-size: 12px; cursor: pointer; }
+  .lrow:hover { color: #fff; } .lname { width: 92px; flex: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ldate { font: 11px ui-monospace, monospace; color: var(--dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .small { font-size: 11px; color: var(--dim); }
+  #timeline { left: 8px; right: 8px; bottom: 8px; display: flex; flex-direction: column; gap: 3px; padding: 5px 10px; }
+  #timeline .row { display: flex; gap: 6px; align-items: center; }
+  #tslider { flex: 1; }
+  #tdate { font: 12px ui-monospace, monospace; min-width: 330px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #ticks { display: block; width: 100%; height: 26px; cursor: pointer; }
+  #minimap { left: 8px; top: 8px; padding: 4px; }
+  #minimap canvas { display: block; cursor: pointer; }
+  body.shots .panel:not(#tip):not(#caption):not(#scorecard) { display: none; }
+  #story { right: 280px; top: 8px; width: 330px; max-height: calc(100vh - 130px); overflow: auto; }
+  #story .ch { border-top: 1px solid var(--line); padding: 6px 0; } #story .ch b { color: #fff; }
+  #story p { margin: 4px 0; font-size: 12px; color: #c3c9d6; }
+  #tip { pointer-events: auto; max-width: 640px; font-size: 12px; z-index: 5; }
+  #tip pre { margin: 4px 0; padding: 4px 6px; background: #0a0c11; border-radius: 4px; white-space: pre-wrap; word-break: break-all; font: 12px/1.35 ui-monospace, "DejaVu Sans Mono", monospace; color: #e8ecf3; }
+  #search { top: 60px; left: 50%; transform: translateX(-50%); width: 660px; max-height: 70vh; overflow: auto; z-index: 6; }
+  #search input[type=text] { width: 420px; }
+  .res { padding: 3px 4px; border-bottom: 1px solid #1d2230; cursor: pointer; font-size: 12px; }
+  .res:hover { background: #1b2233; } .res code { font: 11px ui-monospace, monospace; color: #cfd6e4; }
+  #bookmarks { top: 60px; left: 360px; width: 400px; max-height: 70vh; overflow: auto; z-index: 6; }
+  #filepanel { left: 360px; top: 8px; width: 380px; max-height: 45vh; overflow: auto; }
+  #help { top: 50%; left: 50%; transform: translate(-50%, -50%); width: 600px; z-index: 7; }
+  #help td { padding: 1px 8px 1px 0; vertical-align: top; } #help td:first-child { color: var(--acc); white-space: nowrap; font-family: ui-monospace, monospace; }
+  #loading { left: 50%; top: 8px; transform: translateX(-50%); font-size: 12px; }
+  #toast { left: 50%; top: 44px; transform: translateX(-50%); font-size: 12px; z-index: 8; }
+  #caption { left: 50%; bottom: 110px; transform: translateX(-50%); max-width: min(900px, 80vw); text-align: center; font-size: 15px; padding: 10px 16px; z-index: 4; transition: opacity .8s; }
+  #caption .cl { font: 16px/1.4 ui-monospace, "DejaVu Sans Mono", monospace; color: #fff; margin: 4px 0; white-space: pre-wrap; word-break: break-word; }
+  #caption .cm { color: var(--dim); font-size: 13px; }
+  #scorecard { left: 50%; top: 50%; transform: translate(-50%, -50%); width: 520px; z-index: 9; }
+  #scorecard table { border-collapse: collapse; width: 100%; font-size: 13px; } #scorecard td, #scorecard th { padding: 3px 6px; text-align: right; border-bottom: 1px solid var(--line); }
+  #scorecard td:first-child, #scorecard th:first-child { text-align: left; } #scorecard .score { font-size: 28px; color: var(--acc); text-align: center; margin: 8px 0; }
+  #vol { width: 70px; vertical-align: middle; }
+  body.attract .panel:not(#caption):not(#loading):not(#audiogate) { opacity: 0; pointer-events: none; transition: opacity 1s; }
+  #audiogate { left: 50%; top: 12px; transform: translateX(-50%); z-index: 8; display: flex; align-items: center; gap: 10px; padding: 5px 8px 5px 14px; border-radius: 999px;
+    background: rgba(16, 19, 27, 0.62); border-color: rgba(124, 196, 255, 0.35); font-size: 13px; color: #cfd8e6; pointer-events: none; animation: gatein 1.2s ease-out; }
+  #audiogate .note { color: var(--acc); font-size: 15px; } #audiogate button { pointer-events: auto; padding: 2px 10px; border-radius: 999px; }
+  #audiogate span.hint { padding-right: 6px; }
+  @keyframes gatein { from { opacity: 0; transform: translate(-50%, -6px); } to { opacity: 1; transform: translate(-50%, 0); } }
+  body.shots #audiogate { display: none; }
+  @media (prefers-reduced-motion: reduce) { #audiogate { animation: none; } }
+  body.attract canvas#gl { cursor: none; }
+</style>
+</head>
+<body>
+<canvas id="gl"></canvas>
+<div id="hud" class="panel"></div>
+<div id="loading" class="panel">loading…</div>
+<div id="toast" class="panel hidden"></div>
+<div id="legend" class="panel">
+  <h3>Colour</h3>
+  <div class="modes" id="modes"></div>
+  <label class="small"><input type="checkbox" id="hideinc" checked> hide incidental matches (runs &lt; 3)</label>
+  <div id="legendbody"></div>
+</div>
+<div id="story" class="panel hidden"><h3>Lineage (L)</h3><div id="storybody"></div></div>
+<div id="timeline" class="panel">
+  <div class="row">
+    <button id="tpres" title="Clock: the frames at the clock, neighbours ghosted / Now: live walls on the clock plane / Gallery: every frame (N)">Clock</button>
+    <button id="tprev" title="previous release (PageUp)">|◀</button>
+    <button id="tstepb" title="one month back (,)">◀</button>
+    <button id="tplay" title="play / pause (P)">▶</button>
+    <button id="tstepf" title="one month forward (.)">▶</button>
+    <button id="tnext" title="next release (PageDown)">▶|</button>
+    <select id="tspeed" title="months per second"><option value="0.5">½ mo/s</option><option value="1">1 mo/s</option><option value="2" selected>2 mo/s</option><option value="4">4 mo/s</option><option value="8">8 mo/s</option></select>
+    <input type="range" id="tslider" min="0" max="1" step="1" value="0">
+    <span id="tdate"></span>
+    <button id="tattract" title="attract mode: a guided fly-through (T); any input exits">tour</button>
+    <button id="tmusic" title="generative score (M mutes)">♪</button><input type="range" id="vol" min="0" max="1" step="0.01" value="0.6" title="volume">
+    <button id="tbench" title="run the benchmark and show a score card (nothing is recorded)">bench</button>
+  </div>
+  <canvas id="ticks" height="26"></canvas>
+</div>
+<div id="minimap" class="panel"><canvas id="mm" width="330" height="170"></canvas></div>
+<div id="tip" class="panel hidden"></div>
+<div id="caption" class="panel hidden"></div>
+<div id="audiogate" class="panel hidden" role="status"><span class="note">&#9834;</span><span class="hint">click anywhere for sound</span><button id="gatetour" class="hidden">start tour</button></div>
+<div id="scorecard" class="panel hidden"></div>
+<div id="search" class="panel hidden">
+  <h3>Search (/)</h3>
+  <input type="text" id="sq" placeholder="text, regex or path"> <select id="skind"><option value="text">text</option><option value="regex">regex</option><option value="path">path</option></select>
+  <span class="small" id="sstat"></span>
+  <div id="sres"></div>
+</div>
+<div id="bookmarks" class="panel hidden"><h3>Bookmarks (B)</h3><div id="bmbody"></div></div>
+<div id="filepanel" class="panel hidden"></div>
+<div id="help" class="panel hidden">
+  <h3>Controls</h3>
+  <table>
+    <tr><td>W A S D, Q / E</td><td>fly; Shift 4x faster, Ctrl 4x slower; scroll = speed</td></tr>
+    <tr><td>drag</td><td>look around</td></tr>
+    <tr><td>click</td><td>pin the line tooltip; click a file header to open the file panel</td></tr>
+    <tr><td>F / double-click</td><td>fly to the file under the cursor</td></tr>
+    <tr><td>P  ,  .</td><td>play / pause the clock, one month back / forward</td></tr>
+    <tr><td>PageUp / PageDown</td><td>previous / next release (the marks on the time axis; click one to jump)</td></tr>
+    <tr><td>N</td><td>Now (live walls on the clock, neighbours ghosted) or Gallery (every wall)</td></tr>
+    <tr><td>[ / ]</td><td>same place in the lane's previous / next frame</td></tr>
+    <tr><td>{ / }</td><td>previous / next lane</td></tr>
+    <tr><td>G</td><td>overview</td></tr>
+    <tr><td>1-5</td><td>colour: origin, age, survival, diff vs previous frame, repo of origin</td></tr>
+    <tr><td>T</td><td>the tour (it also starts on load and after 2 minutes idle; a drag, a key or a click takes over)</td></tr>
+    <tr><td>M</td><td>mute / unmute the score (♪ starts it)</td></tr>
+    <tr><td>/  B  I  L  H</td><td>search, bookmarks, minimap, lineage panel, this help</td></tr>
+  </table>
+  <p class="small">Frames: the last commit of every month with commits, plus every release, tag, DreamSTer pin, fork and import point. dc4ever's dates are approximate (its git history is a 2019 rebuild). nullDC, nullDCe, reicast and nullDC 3 were started by drk||Raziel (GitHub skmp; said "D R K Raziel"); the colours show where each line first appeared, not who wrote it. Text: DejaVu Sans Mono, high-resolution SDF. Score: original, synthesised in the browser.</p>
+</div>
+<script type="module" src="src/main.js"></script>
+</body>
+</html>

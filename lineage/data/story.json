@@ -1,0 +1,541 @@
+{
+ "author": {
+  "handle": "drk||Raziel",
+  "said": "D R K Raziel",
+  "github": "skmp"
+ },
+ "chapters": [
+  {
+   "title": "dc4ever, C#, 2002-2005",
+   "lanes": [
+    "dc4ever"
+   ],
+   "text": "The second Dreamcast emulator by drk||Raziel (said \"D R K Raziel\"), written in C#. Its git history is a 2019 reconstruction from backups (one commit per file at its file mtime), so its frames are approximate; the real work is 2003-2005. nullDC was partly derived from it in concept, yet the 2005 line \"{//ToDo : Check This [26/4/05]\" still lives in nullDC 3.",
+   "bookmarks": [
+    "sh4_opcodes 2005 line (dc4ever)",
+    "dc4ever powervr.cs"
+   ],
+   "frames": {
+    "dc4ever": [
+     0,
+     12
+    ]
+   }
+  },
+  {
+   "title": "nullDC, 2005-2013",
+   "lanes": [
+    "nullDC"
+   ],
+   "text": "nullDC was developed closed-source from 2005; the source went public on Google Code in 2010-05 (nullDC 1.0.x). The plugin architecture (drkPvr, nullAICA, ImgReader) and the rec_v1 SH4 recompiler are here.",
+   "bookmarks": [
+    "nullDC rec_v1 driver",
+    "nullDC drkPvr d3dRend",
+    "spg.cpp (Time to emulate that stuff correctly)"
+   ],
+   "frames": {
+    "nullDC": [
+     15,
+     183
+    ]
+   }
+  },
+  {
+   "title": "nullDCe, the late-2008 fork",
+   "lanes": [
+    "nullDCe"
+   ],
+   "text": "nullDCe forked from nullDC mainline in late 2008 for PSP / Wii / PS3 (and later PS2). The repo is a 2017 commit of a recovered archive; the latest in-source date is 2009-10, so its first frame is dated 2009-10 (range 2008-2010). Lines present in both nullDCe 2009 and nullDC are coloured as nullDC-pre2008.",
+   "bookmarks": [
+    "nullDCe rec_v2 driver",
+    "nullDCe rec_v2 shil",
+    "nullDCe drkPvr glesRend"
+   ],
+   "frames": {
+    "nullDCe": [
+     14,
+     204
+    ]
+   }
+  },
+  {
+   "title": "nulldc-360, 2011-2012",
+   "lanes": [
+    "nulldc-360"
+   ],
+   "text": "gligli's Xbox 360 port, imported from nullDC svn trunk of 2011-09 plus a Xenos renderer and a PPC dynarec.",
+   "bookmarks": [
+    "nulldc-360 xenosRend"
+   ],
+   "frames": {
+    "nulldc-360": [
+     29,
+     161
+    ]
+   }
+  },
+  {
+   "title": "reicast, 2013-2021",
+   "lanes": [
+    "reicast"
+   ],
+   "text": "The newdc / nullDC-Android rewrite of 2012-2013, imported as one commit (1c16baeb), then developed in the open with releases r6 .. r20.04. The ARM dynarec and the GLES renderer start here.",
+   "bookmarks": [
+    "reicast ARM dynarec",
+    "reicast gles.cpp",
+    "sh4_opcodes.cpp in reicast 2013"
+   ],
+   "frames": {
+    "reicast": [
+     42,
+     184
+    ]
+   }
+  },
+  {
+   "title": "flycast, 2018-",
+   "lanes": [
+    "flycast"
+   ],
+   "text": "flyinghead's git fork of reicast (last shared commit 2018-09-03; merged reicast until 2019-05-17), the most active descendant today, with releases v1.0 .. v2.7.",
+   "bookmarks": [
+    "flycast rec_x64",
+    "naomi_roms.cpp (longest file)",
+    "and here are the new ones :D"
+   ],
+   "frames": {
+    "flycast": [
+     86,
+     380
+    ]
+   }
+  },
+  {
+   "title": "nullDC 3, 2023-",
+   "lanes": [
+    "nulldc3"
+   ],
+   "text": "nullDC 3 (devcast) is built on reicast 2021-12 and starts with the fpgadc refsw-offline work in 2023-07. refsw grows into refsw2 and the refsw3 refcore, the bit-exact reference for the PowerVR2 hardware work.",
+   "bookmarks": [
+    "refsw (nullDC 3 2023)",
+    "refsw2 tile",
+    "refsw3 refcore tile",
+    "sh4_opcodes.cpp in nullDC 3 refsw3"
+   ],
+   "frames": {
+    "nulldc3": [
+     182,
+     377
+    ]
+   }
+  },
+  {
+   "title": "nullDC4Wii and NotDC-PS3, 2026",
+   "lanes": [
+    "nullDC4Wii",
+    "NotDC-PS3"
+   ],
+   "text": "nullDC4Wii imports nullDCe verbatim (2026-01) and ships about 90 tagged alphas; NotDC-PS3 imports nullDC4Wii (2026-09) and later carries plugs/caiqueAICA, a port of the caique-rtl AICA model.",
+   "bookmarks": [
+    "NotDC-PS3 caiqueAICA"
+   ],
+   "frames": {
+    "nullDC4Wii": [
+     233,
+     376
+    ],
+    "NotDC-PS3": [
+     346,
+     369
+    ]
+   }
+  },
+  {
+   "title": "fpgadc: the hardware re-creation",
+   "lanes": [
+    "minicast",
+    "polly2",
+    "polly2-r8",
+    "devtools",
+    "dreamcast-tests",
+    "shrike4",
+    "caique",
+    "wren7"
+   ],
+   "text": "The FPGA branch of the lineage. Every DreamSTer release pins a polly2-rtl commit (PowerVR2 in SystemVerilog) and a minicast commit (the nullDC-3-derived ARM side); each pin is a release frame: r1, r2, r2b and r3 on 2026-07-17, r4 = r5 on 2026-07-18 (r5 repins nothing), r6 on 2026-07-30 and r6b on 2026-10-24. polly2-rtl r8/develop is its own lane: the new bit-exact model has its own root commit (no merge-base with main) and carries verbatim refsw3 C++ in tb/ ref_copies*.h. shrike4 (SH4), caique (AICA), wren7 (ARM7), dreamcast-tests and dreamcast-devtools are new code.",
+   "bookmarks": [
+    "polly2 r6b peel_core",
+    "polly2 r8 ref_copies.h (refsw3 C++ copy)",
+    "shrike4 v1_core",
+    "caique aica_core",
+    "wren7 core"
+   ],
+   "frames": {
+    "minicast": [
+     211,
+     359
+    ],
+    "polly2": [
+     304,
+     361
+    ],
+    "polly2-r8": [
+     379,
+     379
+    ],
+    "devtools": [
+     227,
+     362
+    ],
+    "dreamcast-tests": [
+     378,
+     378
+    ],
+    "shrike4": [
+     352,
+     368
+    ],
+    "caique": [
+     349,
+     370
+    ],
+    "wren7": [
+     351,
+     371
+    ]
+   }
+  }
+ ],
+ "bookmarks": [
+  {
+   "group": "SH4 interpreter",
+   "title": "sh4_opcodes 2005 line (dc4ever)",
+   "lane": "dc4ever",
+   "frame": 12,
+   "date": "2005-09-15",
+   "path": "DC/SH4.7091/sh4_opcodes_test.cs",
+   "line": 0,
+   "grep": "ToDo : Check This [26/4/05]"
+  },
+  {
+   "group": "SH4 interpreter",
+   "title": "sh4_opcodes.cpp in reicast 2013",
+   "lane": "reicast",
+   "frame": 42,
+   "date": "2013-12-19",
+   "path": "newdc/hw/sh4/interpr/sh4_opcodes.cpp",
+   "line": 0,
+   "grep": null
+  },
+  {
+   "group": "SH4 interpreter",
+   "title": "sh4_opcodes.cpp in nullDC 3 refsw3",
+   "lane": "nulldc3",
+   "frame": 377,
+   "date": "2026-11-20",
+   "path": "libswirl/hw/sh4/interpr/sh4_opcodes.cpp",
+   "line": 189,
+   "grep": null
+  },
+  {
+   "group": "SH4 interpreter",
+   "title": "sh4_opcodes.cpp in flycast",
+   "lane": "flycast",
+   "frame": 380,
+   "date": "2026-11-22",
+   "path": "core/hw/sh4/interpr/sh4_opcodes.cpp",
+   "line": 0,
+   "grep": null
+  },
+  {
+   "group": "SH4 recompiler",
+   "title": "nullDC rec_v1 driver",
+   "lane": "nullDC",
+   "frame": 28,
+   "date": "2011-09-14",
+   "path": "nulldc/nullDC/dc/sh4/rec_v1/driver.cpp",
+   "line": 0,
+   "grep": null
+  },
+  {
+   "group": "SH4 recompiler",
+   "title": "nullDC rec_v1 driver (2010-05)",
+   "lane": "nullDC",
+   "frame": 15,
+   "date": "2010-05-09",
+   "path": "nulldc/nullDC/dc/sh4/rec_v1/driver.cpp",
+   "line": 0,
+   "grep": null
+  },
+  {
+   "group": "SH4 recompiler",
+   "title": "nullDCe rec_v2 driver",
+   "lane": "nullDCe",
+   "frame": 14,
+   "date": "2009-10-16",
+   "path": "dc/sh4/rec_v2/driver.cpp",
+   "line": 0,
+   "grep": null
+  },
+  {
+   "group": "SH4 recompiler",
+   "title": "nullDCe rec_v2 shil",
+   "lane": "nullDCe",
+   "frame": 14,
+   "date": "2009-10-16",
+   "path": "dc/sh4/rec_v2/shil.cpp",
+   "line": 0,
+   "grep": null
+  },
+  {
+   "group": "SH4 recompiler",
+   "title": "reicast ARM dynarec",
+   "lane": "reicast",
+   "frame": 42,
+   "date": "2013-12-19",
+   "path": "newdc/rec-ARM/arm_dyna.cpp",
+   "line": 0,
+   "grep": null
+  },
+  {
+   "group": "SH4 recompiler",
+   "title": "reicast-last rec_arm (arm32)",
+   "lane": "reicast",
+   "frame": 184,
+   "date": "2023-07-10",
+   "path": "libswirl/jit/backend/arm32/rec_arm.cpp",
+   "line": 0,
+   "grep": null
+  },
+  {
+   "group": "SH4 recompiler",
+   "title": "nullDC 3 rec_x64",
+   "lane": "nulldc3",
+   "frame": 377,
+   "date": "2026-11-20",
+   "path": "libswirl/jit/backend/x64/rec_x64.cpp",
+   "line": 0,
+   "grep": null
+  },
+  {
+   "group": "SH4 recompiler",
+   "title": "reicast rec_x64",
+   "lane": "reicast",
+   "frame": 184,
+   "date": "2023-07-10",
+   "path": "libswirl/jit/backend/x64/rec_x64.cpp",
+   "line": 0,
+   "grep": null
+  },
+  {
+   "group": "SH4 recompiler",
+   "title": "flycast rec_x64",
+   "lane": "flycast",
+   "frame": 380,
+   "date": "2026-11-22",
+   "path": "core/rec-x64/rec_x64.cpp",
+   "line": 0,
+   "grep": null
+  },
+  {
+   "group": "PowerVR",
+   "title": "dc4ever powervr.cs",
+   "lane": "dc4ever",
+   "frame": 12,
+   "date": "2005-09-15",
+   "path": "DC/PowerVR2DC/powervr.cs",
+   "line": 0,
+   "grep": null
+  },
+  {
+   "group": "PowerVR",
+   "title": "nullDC drkPvr d3dRend",
+   "lane": "nullDC",
+   "frame": 28,
+   "date": "2011-09-14",
+   "path": "nulldc/plugins/drkPvr/d3dRend.cpp",
+   "line": 0,
+   "grep": null
+  },
+  {
+   "group": "PowerVR",
+   "title": "spg.cpp (Time to emulate that stuff correctly)",
+   "lane": "nullDC",
+   "frame": 15,
+   "date": "2010-05-09",
+   "path": "nulldc/plugins/drkPvr/SPG.cpp",
+   "line": 0,
+   "grep": "Time to emulate that stuff correctly"
+  },
+  {
+   "group": "PowerVR",
+   "title": "nullDCe drkPvr glesRend",
+   "lane": "nullDCe",
+   "frame": 14,
+   "date": "2009-10-16",
+   "path": "plugs/drkPvr/glesRend.cpp",
+   "line": 0,
+   "grep": null
+  },
+  {
+   "group": "PowerVR",
+   "title": "nulldc-360 xenosRend",
+   "lane": "nulldc-360",
+   "frame": 161,
+   "date": "2022-02-11",
+   "path": "plugins/drkPvr/xenosRend.cpp",
+   "line": 0,
+   "grep": null
+  },
+  {
+   "group": "PowerVR",
+   "title": "reicast gles.cpp",
+   "lane": "reicast",
+   "frame": 42,
+   "date": "2013-12-19",
+   "path": "newdc/rend/gles/gles.cpp",
+   "line": 0,
+   "grep": null
+  },
+  {
+   "group": "PowerVR",
+   "title": "refsw (nullDC 3 2023)",
+   "lane": "nulldc3",
+   "frame": 182,
+   "date": "2023-07-07",
+   "path": "libswirl/rend/soft/refsw.cpp",
+   "line": 0,
+   "grep": null
+  },
+  {
+   "group": "PowerVR",
+   "title": "refsw2 tile",
+   "lane": "nulldc3",
+   "frame": 364,
+   "date": "2026-10-25",
+   "path": "libswirl/rend/refsw2/refsw_tile.cpp",
+   "line": 0,
+   "grep": null
+  },
+  {
+   "group": "PowerVR",
+   "title": "refsw3 refcore tile",
+   "lane": "nulldc3",
+   "frame": 377,
+   "date": "2026-11-20",
+   "path": "refsw3/refcore/refsw_tile.cpp",
+   "line": 0,
+   "grep": null
+  },
+  {
+   "group": "FPGA",
+   "title": "polly2 r6b peel_core",
+   "lane": "polly2",
+   "frame": 361,
+   "date": "2026-10-24",
+   "path": "polly2-core/rtl/peel_core.sv",
+   "line": 0,
+   "grep": null
+  },
+  {
+   "group": "FPGA",
+   "title": "polly2 r8 ref_copies.h (refsw3 C++ copy)",
+   "lane": "polly2-r8",
+   "frame": 379,
+   "date": "2026-11-21",
+   "path": "tb/ref/ref_copies.h",
+   "line": 0,
+   "grep": null
+  },
+  {
+   "group": "FPGA",
+   "title": "polly2 r8 ref_copies_setup.h (refsw3 C++ copy)",
+   "lane": "polly2-r8",
+   "frame": 379,
+   "date": "2026-11-21",
+   "path": "tb/isp_setup/ref_copies_setup.h",
+   "line": 0,
+   "grep": null
+  },
+  {
+   "group": "FPGA",
+   "title": "shrike4 v1_core",
+   "lane": "shrike4",
+   "frame": 368,
+   "date": "2026-10-31",
+   "path": "rtl/v1/v1_core.sv",
+   "line": 0,
+   "grep": null
+  },
+  {
+   "group": "FPGA",
+   "title": "caique aica_core",
+   "lane": "caique",
+   "frame": 370,
+   "date": "2026-11-01",
+   "path": "rtl/v1/aica_core.sv",
+   "line": 0,
+   "grep": null
+  },
+  {
+   "group": "FPGA",
+   "title": "wren7 core",
+   "lane": "wren7",
+   "frame": 371,
+   "date": "2026-11-01",
+   "path": "rtl/v1/wren7_core.sv",
+   "line": 0,
+   "grep": null
+  },
+  {
+   "group": "Cross-lane copies",
+   "title": "NotDC-PS3 caiqueAICA",
+   "lane": "NotDC-PS3",
+   "frame": 369,
+   "date": "2026-11-01",
+   "path": "plugs/caiqueAICA/aica_model.cpp",
+   "line": 0,
+   "grep": null
+  },
+  {
+   "group": "Cross-lane copies",
+   "title": "devtools aica_dsp_playground dsp.h",
+   "lane": "devtools",
+   "frame": 362,
+   "date": "2026-10-24",
+   "path": "experiments/aica_dsp_playground/dsp/dsp.h",
+   "line": 0,
+   "grep": null
+  },
+  {
+   "group": "Oddities",
+   "title": "fsca-table.h (4096 rows)",
+   "lane": "nulldc3",
+   "frame": 377,
+   "date": "2026-11-20",
+   "path": "libswirl/hw/sh4/fsca-table.h",
+   "line": 0,
+   "grep": null
+  },
+  {
+   "group": "Oddities",
+   "title": "naomi_roms.cpp (longest file)",
+   "lane": "flycast",
+   "frame": 380,
+   "date": "2026-11-22",
+   "path": "core/hw/naomi/naomi_roms.cpp",
+   "line": 0,
+   "grep": null
+  },
+  {
+   "group": "Oddities",
+   "title": "and here are the new ones :D",
+   "lane": "flycast",
+   "frame": 380,
+   "date": "2026-11-22",
+   "path": "core/hw/sh4/sh4_opcode_list.cpp",
+   "line": 0,
+   "grep": "and here are the new ones :D"
+  }
+ ]
+}
