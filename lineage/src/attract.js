@@ -40,18 +40,22 @@ export function initAttract(V) {
     while (performance.now() - t0 < ms) { if (token !== run) return false; const t = (performance.now() - t0) / 1000; V.cam.p = [p0[0] + Math.sin(t * 0.4) * 8 - t * 6, p0[1] - t * 3, p0[2] + t * 9]; await sleep(30); }
     return true;
   }
+  // dates: the last change of the file holding the item as of that frame (precomputed in tools/attract_prep.mjs), not
+  // the date of the frame's commit tree
+  const changed = fc => fc ? `file last changed ${esc(fc.label)}` : '';
   function caption(it, stop) {
-    const fr = F.frames[stop[0]], lane = fr.lane;
+    const fr = F.frames[stop[0]], lane = fr.lane, k = it.stops.indexOf(stop), fc = it.stop_files ? it.stop_files[k] : null;
+    const first = it.origin_file ? `, ${changed(it.origin_file)}` : ` ${esc(it.origin_frame_date || it.origin_date || '')}`;
     let h = it.unique ? `<div class="uq">unique: only ever in ${esc(it.lanes[0])}</div>` : '';
     if (it.kind === 'line') {
-      h += `<div class="cl">${esc(it.text)}</div><div class="cm">first seen in <b>${esc(it.origin_lane)}</b> ${esc(it.origin_date)}; ` +
+      h += `<div class="cl">${esc(it.text)}</div><div class="cm">first seen in <b>${esc(it.origin_lane)}</b>${first}; ` +
         (it.unique ? `held by ${it.frames} frames` : `held by ${it.frames} frames in ${it.lanes.length} lanes (${esc(it.lanes.join(', '))})`) + `</div>`;
     } else if (it.kind === 'segment') {
-      h += `<div class="ct">${esc(it.title)}</div><div class="cm">${it.n} lines, first seen in <b>${esc(it.origin_lane)}</b> ${esc(it.origin_date)}; ` +
+      h += `<div class="ct">${esc(it.title)}</div><div class="cm">${it.n} lines, first seen in <b>${esc(it.origin_lane)}</b>${first}; ` +
         (it.unique ? `held by ${it.frames} frames` : `held by ${it.frames} frames in ${it.lanes.length} lanes (${esc(it.lanes.join(', '))})`) + `</div>`;
-    } else h += `<div class="cl">${esc(it.title)}</div><div class="cm">${it.frames} frames in ${it.lanes.length} lanes (${esc(it.lanes.join(', '))}), since ${esc(it.first_date)}</div>`;
+    } else h += `<div class="cl">${esc(it.title)}</div><div class="cm">${it.frames} frames in ${it.lanes.length} lanes (${esc(it.lanes.join(', '))}), first: ${it.first_file ? changed(it.first_file) : esc(it.first_frame_date || it.first_date)}</div>`;
     if (it.note && it.picked) h += `<div class="nt">${esc(it.note)}</div>`;
-    h += `<div class="cm">now: ${esc(lane)} ${esc(fr.date)}${fr.tags ? ' ' + esc(fr.tags.join(', ')) : ''}${it.note && !it.picked ? ' | ' + esc(it.note) : ''}</div>`;
+    h += `<div class="cm">now: ${esc(lane)}${fr.tags ? ' ' + esc(fr.tags.join(', ')) : ''}, ${fc ? changed(fc) : 'frame ' + esc(fr.date)}${it.note && !it.picked ? ' | ' + esc(it.note) : ''}</div>`;
     cap.innerHTML = h; cap.classList.remove('hidden'); cap.style.opacity = 1;
   }
   // order: random on every load and every lap. Curated and computed items are shuffled separately, then merged with a

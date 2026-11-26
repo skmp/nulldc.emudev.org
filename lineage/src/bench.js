@@ -38,7 +38,8 @@ export function initBench(V) {
         const best = [...cnt].sort((x, y) => y[1] - x[1])[0]; if (best) { col = best[0] >> 6; row = (best[0] & 63) * 32 + 16; } }
       const v = V.wallView(W[b], col, row, V.readDist(11)); V.cam.p = v.p; V.setLook(v.dir); opts.morph = true;
     } else if (name === 'now') { V.presMode = 'now'; V.setX(W[laneByName('reicast').frames[40]].x + 0.3 * U, { follow: false }); lookAt([V.X - 30000, 9000, 40000], [V.X, 1500, 75000]); opts.noWalls = true; }
-    else if (name === 'fork') { const fs = [28, 14, 42, 43, 29].filter(f => W[f]); V.setX(W[42].x + 1); const v = V.fitBox(V.wallsBox(fs), [0.88, -0.42, 0.12]); V.cam.p = v.p; V.setLook(v.dir); opts.noWalls = true; }
+    else if (name === 'fork') { const byC = c => F.frames.findIndex(f => f.commit && f.commit.startsWith(c));   // nullDC c563e07, nullDCe 39c0550, reicast import 1c16baeb0 + next frame, nulldc-360 import
+      const fs = ['c563e075c1fa', '39c055006291', '1c16baeb0eae', '1a4801b5699f', '03302923daf3'].map(byC).filter(f => W[f]); V.setX(W[byC('1c16baeb0eae')].x + 1); const v = V.fitBox(V.wallsBox(fs), [0.88, -0.42, 0.12]); V.cam.p = v.p; V.setLook(v.dir); opts.noWalls = true; }
     else if (name === 'fpgadc') { const fs = WALLS.filter(w => LN[w.lane].L.group === 'fpgadc' && (w.solidRelease || w.i === LN[w.lane].frames.at(-1))).map(w => w.i); V.setX(V.xMax); const v = V.fitBox(V.wallsBox(fs), [0.62, -0.5, 0.6]); V.cam.p = v.p; V.setLook(v.dir); opts.noWalls = true; }
     else if (name === 'attract') {   // an attract caption over its line
       const it = V.attract.items.find(i => i.curated) || V.attract.items[0], st = it.stops[Math.min(1, it.stops.length - 1)], w = W[st[0]];

@@ -3,10 +3,11 @@ const HEAD = `#version 300 es
 precision highp float; precision highp int;
 precision highp usampler2D; precision highp usampler2DArray; precision highp sampler2D;
 `;
-// uWallTex: RGBA32F, texel w = (display x, alpha, solid, 0) of wall w (frame index; 1021 = static, 1022 = clock)
+// uWallTex: RGBA32F, 1024 wide, texel (w & 1023, w >> 10) = (display x, alpha, solid, 0) of wall w (frame index;
+// NONE = static and CLOCK = clock: the two indices after the last frame, see main.js)
 const COMMON = `
 uniform mat4 uVP; uniform vec3 uCam; uniform vec3 uFwd; uniform float uFocal; uniform sampler2D uWallTex;
-vec4 wallOf(uint w) { return texelFetch(uWallTex, ivec2(int(w & 1023u), 0), 0); }
+vec4 wallOf(uint w) { return texelFetch(uWallTex, ivec2(int(w & 1023u), int(w >> 10)), 0); }
 vec3 pushK(vec3 p, float k) { return uCam + (p - uCam) * k; }
 `;
 // ---- glyphs: high-res SDF atlas (64x128 cells, spread 12 px), mipmapped + anisotropic; explicit gradients from the
@@ -60,7 +61,7 @@ void main() {
   uint pos = kind == 2u ? w.z : (w.y & 0xFFFFFu);
 #else
   uvec2 w = texelFetch(uInst, tc, 0).xy;
-  uint pos = w.y & 0xFFFFFu, keep = (w.y >> 20) & 511u, flags = w.x >> 29;
+  uint pos = w.y & 0xFFFFFu, keep = ((w.y >> 20) & 1023u) | ((w.x >> 31) << 10), flags = w.y >> 30;
 #endif
   uint id = w.x & 0xFFFFFu;
   ivec2 lc = ivec2(int(id & 2047u), int(id >> 11));
@@ -97,7 +98,7 @@ void main() {
   else gl_Position = uVP * vec4(p, 1.);
   vL = vec2(zl, cr.y * 2.);
   vDist = max(dot(p - uCam, uFwd), 0.5);
-  vInfo = uvec4(id, (w.x >> 20) & 511u, flags, keep);
+  vInfo = uvec4(id, (w.x >> 20) & 2047u, flags, keep);
   vOff = texelFetch(uOffs, lc, 0).x; vLen = len; vInd = ind;
   vTint = tint; vAlpha = alpha * uAlpha * (m.y >= 128u ? 0.78 : 1.);
   vHi = (idx >= uHi.x && idx < uHi.y) ? 1. : 0.;
@@ -124,7 +125,7 @@ void main() {
   if (uMode == 0) c = pal(0, origin);
   else if (uMode == 1) c = pal(1, origin);
   else if (uMode == 2) {
-    if (keep == 511u) c = pal(0, origin) * 0.4;
+    if (keep == 2047u) c = pal(0, origin) * 0.4;   // TRIV (core.js)
     else { float poss = float(texelFetch(uPoss, ivec2(int(origin), uLane), 0).r);
       float r = poss > 0. ? clamp(float(keep) / poss, 0., 1.) : 1.; c = pal(3, uint(r * 63. + 0.5)); }
   } else if (uMode == 3) c = (flags & 2u) != 0u ? vec3(0.3, 0.95, 0.4) : vec3(0.40, 0.42, 0.47);

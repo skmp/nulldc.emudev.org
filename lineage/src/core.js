@@ -1,9 +1,9 @@
 // core.js: pure data logic for the frame data (format 2, agents/frames/FORMAT.md), shared by the decode worker and
 // Node checks (no DOM, no GL).
 export const H = 2048, HDR = 2, GAP = 2, TEXMAX = 124, COLP = 128;
-export const F_INC = 1, F_ADD = 2;                 // instance flags (3 bits at w0 >> 29)
+export const F_INC = 1, F_ADD = 2;                 // instance flags (2 bits at w1 >> 30)
 export const M_KEPT = 0, M_ADDED = 1, M_REMOVED = 2;
-export const TRIV = 511;                           // keep value of trivial lines (blank, brackets)
+export const TRIV = 2047;                          // keep value of trivial lines (blank, brackets); keeps are 11 bits
 export const ST = ['same', 'new', 'edit', 'move', 'move+edit', 'copy', 'import'];
 export const stCode = s => Math.max(0, ST.indexOf(s));
 
@@ -39,7 +39,7 @@ export function decodeChunk(json, bin) {
     const line = new Uint32Array(buf.slice(b0 + 4 * nw, b0 + 4 * nw + 4 * nl));
     const oo = b0 + 4 * nw + 4 * nl;
     const origin = new Uint16Array(buf.slice(oo, oo + 2 * nl));
-    const ko = oo + ((2 * nl + 3) & ~3);
+    const ko = oo + 2 * nl;   // keep follows origin directly (tools/provenance/frames.cpp writes no padding)
     const keep = new Uint16Array(buf.slice(ko, ko + 2 * nl));
     out.push({ f: fr.f, key: !!fr.key, ops: fr.ops, script, line, origin, keep });
   }
@@ -116,7 +116,8 @@ export function relatedMask(F, li) {
 }
 
 // ---- wall instances: RG32UI per line, sorted by linear position ----
-// w0 = id (20) | origin (9) << 20 | flags (3) << 29 ; w1 = col (9) | row (11) << 9 | keep (9) << 20
+// w0 = id (20) | origin (11) << 20 | keep bit 10 << 31 ; w1 = col (9) | row (11) << 9 | keep bits 0-9 << 20 | flags (2) << 30
+// (origin = frame index and keep = frames: 11 bits each, up to 2047 frames; keep 2047 = trivial)
 export function buildWall(state, slots, cols, related, runMin = 3) {
   const files = [];
   for (const [ident, f] of state) { const s = slots.byIdent.get(ident); if (s === undefined) throw new Error('no slot for identity ' + ident); files.push([slots.L[s], ident, f, s]); }
@@ -132,15 +133,16 @@ export function buildWall(state, slots, cols, related, runMin = 3) {
     for (let l = 0; l < nn; l++) {
       const P = base + l, col = (P / H) | 0, row = P % H, kp = f.kp[l];
       const flags = (f.add && f.add[l] ? F_ADD : 0);
-      inst[2 * j] = ((f.ids[l] & 0xFFFFF) | ((f.og[l] & 511) << 20) | (flags << 29)) >>> 0;
-      inst[2 * j + 1] = (col & 511) | ((row & 2047) << 9) | ((kp === 0xFFFF ? TRIV : Math.min(510, kp)) << 20);
+      const k11 = kp === 0xFFFF ? TRIV : Math.min(TRIV - 1, kp);
+      inst[2 * j] = ((f.ids[l] & 0xFFFFF) | ((f.og[l] & 2047) << 20) | ((k11 >> 10) << 31)) >>> 0;
+      inst[2 * j + 1] = ((col & 511) | ((row & 2047) << 9) | ((k11 & 1023) << 20) | (flags << 30)) >>> 0;
       j++;
     }
     let a = -1;   // incidental: unrelated-origin runs shorter than runMin
     for (let l = 0; l <= nn; l++) {
       const un = l < nn && f.kp[l] !== 0xFFFF && !related[f.og[l]];
       if (un && a < 0) a = l;
-      if (!un && a >= 0) { if (l - a < runMin) for (let q = a; q < l; q++) inst[2 * (j0 + q)] = (inst[2 * (j0 + q)] | (F_INC << 29)) >>> 0; a = -1; }
+      if (!un && a >= 0) { if (l - a < runMin) for (let q = a; q < l; q++) inst[2 * (j0 + q) + 1] = (inst[2 * (j0 + q) + 1] | (F_INC << 30)) >>> 0; a = -1; }
     }
   });
   fileStart[nf] = n;
@@ -157,8 +159,8 @@ export function buildMorph(sa, sb, slots) {
   const pos = (s, l) => { const P = slots.L[s] + HDR + l; return (((P / H) | 0) & 511) | ((P % H) << 9); };
   const seed = p => (Math.imul(p ^ 0x9E3779B9, 0x85EBCA6B) >>> 24) & 0xFF;
   const push = (id, og, kp, pb, pa, kind) => { const o = 4 * m++;
-    out[o] = (id & 0xFFFFF) | ((og & 511) << 20); out[o + 1] = ((pb & 0xFFFFF) | (kind << 20) | (seed(kind === M_REMOVED ? pa : pb) << 22)) >>> 0;
-    out[o + 2] = pa; out[o + 3] = kp === 0xFFFF ? TRIV : Math.min(510, kp); };
+    out[o] = ((id & 0xFFFFF) | ((og & 2047) << 20)) >>> 0; out[o + 1] = ((pb & 0xFFFFF) | (kind << 20) | (seed(kind === M_REMOVED ? pa : pb) << 22)) >>> 0;
+    out[o + 2] = pa; out[o + 3] = kp === 0xFFFF ? TRIV : Math.min(TRIV - 1, kp); };
   let kept = 0, added = 0, removed = 0;
   for (const [ident, fb] of sb) {
     const s = slots.byIdent.get(ident), fa = sa ? sa.get(ident) : null;
@@ -196,13 +198,15 @@ export function buildMorph(sa, sb, slots) {
 // ---- time: x (layout units) <-> month index (since layout.time.month0) ----
 export function timeMaps(layout) {
   const K = layout.time.knots, [y0, m0] = layout.time.month0.split('-').map(Number), U = layout.unit.month;
+  // binary search: the knots are dense where the axis is stretched (hundreds of them)
+  const seg = (v, c) => { let lo = 0, hi = K.length - 1; while (hi - lo > 1) { const mid = (lo + hi) >> 1; if (K[mid][c] <= v) lo = mid; else hi = mid; } return lo; };
   const xOfMonth = m => { if (m <= K[0][0]) return K[0][1] + (m - K[0][0]) * U;
-    for (let i = 1; i < K.length; i++) if (m <= K[i][0]) { const [ma, xa] = K[i - 1], [mb, xb] = K[i]; return xa + (xb - xa) * (m - ma) / (mb - ma); }
-    const [ma, xa] = K.at(-1); return xa + (m - ma) * U; };
+    if (m >= K.at(-1)[0]) { const [ma, xa] = K.at(-1); return xa + (m - ma) * U; }
+    const i = seg(m, 0), [ma, xa] = K[i], [mb, xb] = K[i + 1]; return xa + (xb - xa) * (m - ma) / (mb - ma); };
   const monthOfX = x => { if (x <= K[0][1]) return K[0][0] + (x - K[0][1]) / U;
-    for (let i = 1; i < K.length; i++) if (x <= K[i][1]) { const [ma, xa] = K[i - 1], [mb, xb] = K[i]; return ma + (mb - ma) * (x - xa) / Math.max(1e-9, xb - xa); }
-    const [ma, xa] = K.at(-1); return ma + (x - xa) / U; };
+    if (x >= K.at(-1)[1]) { const [ma, xa] = K.at(-1); return ma + (x - xa) / U; }
+    const i = seg(x, 1), [ma, xa] = K[i], [mb, xb] = K[i + 1]; return ma + (mb - ma) * (x - xa) / Math.max(1e-9, xb - xa); };
   const monthOfDate = d => { const [y, m, dd] = d.split('-').map(Number); return (y - y0) * 12 + (m - m0) + ((dd || 1) - 1) / 31; };
-  const dateOfMonth = mm => { const t = Math.floor(mm + 1e-6), y = y0 + Math.floor((m0 - 1 + t) / 12), m = ((m0 - 1 + t) % 12 + 12) % 12 + 1; return `${y}-${String(m).padStart(2, '0')}`; };
+  const dateOfMonth = mm => { const t = Math.floor(mm + 1e-3)   /* walls sit at rounded x: up to half a unit left of their date */, y = y0 + Math.floor((m0 - 1 + t) / 12), m = ((m0 - 1 + t) % 12 + 12) % 12 + 1; return `${y}-${String(m).padStart(2, '0')}`; };
   return { xOfMonth, monthOfX, monthOfDate, dateOfMonth, xOfDate: d => xOfMonth(monthOfDate(d)) };
 }
