@@ -18,7 +18,7 @@
    "frames": {
     "dc4ever": [
      0,
-     12
+     101
     ]
    }
   },
@@ -35,8 +35,8 @@
    ],
    "frames": {
     "nullDC": [
-     15,
-     189
+     104,
+     598
     ]
    }
   },
@@ -53,8 +53,8 @@
    ],
    "frames": {
     "nullDCe": [
-     14,
-     210
+     103,
+     632
     ]
    }
   },
@@ -69,8 +69,8 @@
    ],
    "frames": {
     "nullDCe-PSP": [
-     146,
-     161
+     526,
+     557
     ]
    }
   },
@@ -85,8 +85,8 @@
    ],
    "frames": {
     "nulldc-360": [
-     29,
-     167
+     224,
+     566
     ]
    }
   },
@@ -103,8 +103,8 @@
    ],
    "frames": {
     "reicast": [
-     42,
-     190
+     351,
+     599
     ]
    }
   },
@@ -121,8 +121,8 @@
    ],
    "frames": {
     "flycast": [
-     86,
-     395
+     434,
+     1472
     ]
    }
   },
@@ -140,8 +140,8 @@
    ],
    "frames": {
     "nulldc3": [
-     188,
-     389
+     595,
+     1434
     ]
    }
   },
@@ -159,16 +159,16 @@
    ],
    "frames": {
     "nullDC4Wii": [
-     239,
-     387
+     763,
+     1375
     ],
     "NotDC-PS3": [
-     352,
-     376
+     1099,
+     1256
     ],
     "nullDC4WiiU": [
-     386,
-     394
+     1265,
+     1471
     ]
    }
   },
@@ -183,8 +183,8 @@
    ],
    "frames": {
     "HarissaDC": [
-     379,
-     388
+     1260,
+     1426
     ]
    }
   },
@@ -210,36 +210,36 @@
    ],
    "frames": {
     "minicast": [
-     217,
-     365
+     644,
+     1240
     ],
     "polly2": [
-     310,
-     367
+     853,
+     1244
     ],
     "polly2-r8": [
-     393,
-     393
+     1435,
+     1470
     ],
     "devtools": [
-     233,
-     368
+     712,
+     1245
     ],
     "dreamcast-tests": [
-     390,
-     390
+     1285,
+     1447
     ],
     "shrike4": [
-     358,
-     375
+     1122,
+     1255
     ],
     "caique": [
-     355,
-     377
+     1123,
+     1258
     ],
     "wren7": [
-     357,
-     378
+     1130,
+     1259
     ]
    }
   }
@@ -249,7 +249,7 @@
    "group": "SH4 interpreter",
    "title": "sh4_opcodes 2005 line (dc4ever)",
    "lane": "dc4ever",
-   "frame": 12,
+   "frame": 101,
    "date": "2005-09-15",
    "path": "DC/SH4.7091/sh4_opcodes_test.cs",
    "line": 0,
@@ -259,7 +259,7 @@
    "group": "SH4 interpreter",
    "title": "sh4_opcodes.cpp in reicast 2013",
    "lane": "reicast",
-   "frame": 42,
+   "frame": 351,
    "date": "2013-12-19",
    "path": "newdc/hw/sh4/interpr/sh4_opcodes.cpp",
    "line": 0,
@@ -269,7 +269,7 @@
    "group": "SH4 interpreter",
    "title": "sh4_opcodes.cpp in nullDC 3 refsw3",
    "lane": "nulldc3",
-   "frame": 389,
+   "frame": 1434,
    "date": "2026-11-20",
    "path": "libswirl/hw/sh4/interpr/sh4_opcodes.cpp",
    "line": 189,
@@ -279,7 +279,7 @@
    "group": "SH4 interpreter",
    "title": "sh4_opcodes.cpp in flycast",
    "lane": "flycast",
-   "frame": 395,
+   "frame": 1472,
    "date": "2026-11-22",
    "path": "core/hw/sh4/interpr/sh4_opcodes.cpp",
    "line": 0,
@@ -289,7 +289,7 @@
    "group": "SH4 recompiler",
    "title": "nullDC rec_v1 driver",
    "lane": "nullDC",
-   "frame": 28,
+   "frame": 223,
    "date": "2011-09-14",
    "path": "nulldc/nullDC/dc/sh4/rec_v1/driver.cpp",
    "line": 0,
@@ -299,7 +299,7 @@
    "group": "SH4 recompiler",
    "title": "nullDC rec_v1 driver (2010-05)",
    "lane": "nullDC",
-   "frame": 15,
+   "frame": 107,
    "date": "2010-05-09",
    "path": "nulldc/nullDC/dc/sh4/rec_v1/driver.cpp",
    "line": 0,
@@ -309,7 +309,7 @@
    "group": "SH4 recompiler",
    "title": "nullDCe rec_v2 driver",
    "lane": "nullDCe",
-   "frame": 14,
+   "frame": 103,
    "date": "2009-10-16",
    "path": "dc/sh4/rec_v2/driver.cpp",
    "line": 0,
@@ -319,7 +319,7 @@
    "group": "SH4 recompiler",
    "title": "nullDCe rec_v2 shil",
    "lane": "nullDCe",
-   "frame": 14,
+   "frame": 103,
    "date": "2009-10-16",
    "path": "dc/sh4/rec_v2/shil.cpp",
    "line": 0,
@@ -329,7 +329,7 @@
    "group": "SH4 recompiler",
    "title": "reicast ARM dynarec",
    "lane": "reicast",
-   "frame": 42,
+   "frame": 351,
    "date": "2013-12-19",
    "path": "newdc/rec-ARM/arm_dyna.cpp",
    "line": 0,
@@ -339,7 +339,7 @@
    "group": "SH4 recompiler",
    "title": "reicast-last rec_arm (arm32)",
    "lane": "reicast",
-   "frame": 190,
+   "frame": 599,
    "date": "2023-07-10",
    "path": "libswirl/jit/backend/arm32/rec_arm.cpp",
    "line": 0,
@@ -349,7 +349,7 @@
    "group": "SH4 recompiler",
    "title": "nullDC 3 rec_x64",
    "lane": "nulldc3",
-   "frame": 389,
+   "frame": 1434,
    "date": "2026-11-20",
    "path": "libswirl/jit/backend/x64/rec_x64.cpp",
    "line": 0,
@@ -359,7 +359,7 @@
    "group": "SH4 recompiler",
    "title": "reicast rec_x64",
    "lane": "reicast",
-   "frame": 190,
+   "frame": 599,
    "date": "2023-07-10",
    "path": "libswirl/jit/backend/x64/rec_x64.cpp",
    "line": 0,
@@ -369,7 +369,7 @@
    "group": "SH4 recompiler",
    "title": "flycast rec_x64",
    "lane": "flycast",
-   "frame": 395,
+   "frame": 1472,
    "date": "2026-11-22",
    "path": "core/rec-x64/rec_x64.cpp",
    "line": 0,
@@ -379,7 +379,7 @@
    "group": "PowerVR",
    "title": "dc4ever powervr.cs",
    "lane": "dc4ever",
-   "frame": 12,
+   "frame": 101,
    "date": "2005-09-15",
    "path": "DC/PowerVR2DC/powervr.cs",
    "line": 0,
@@ -389,7 +389,7 @@
    "group": "PowerVR",
    "title": "nullDC drkPvr d3dRend",
    "lane": "nullDC",
-   "frame": 28,
+   "frame": 223,
    "date": "2011-09-14",
    "path": "nulldc/plugins/drkPvr/d3dRend.cpp",
    "line": 0,
@@ -399,7 +399,7 @@
    "group": "PowerVR",
    "title": "spg.cpp (Time to emulate that stuff correctly)",
    "lane": "nullDC",
-   "frame": 15,
+   "frame": 107,
    "date": "2010-05-09",
    "path": "nulldc/plugins/drkPvr/SPG.cpp",
    "line": 0,
@@ -409,7 +409,7 @@
    "group": "PowerVR",
    "title": "nullDCe drkPvr glesRend",
    "lane": "nullDCe",
-   "frame": 14,
+   "frame": 103,
    "date": "2009-10-16",
    "path": "plugs/drkPvr/glesRend.cpp",
    "line": 0,
@@ -419,7 +419,7 @@
    "group": "PowerVR",
    "title": "nulldc-360 xenosRend",
    "lane": "nulldc-360",
-   "frame": 167,
+   "frame": 566,
    "date": "2022-02-11",
    "path": "plugins/drkPvr/xenosRend.cpp",
    "line": 0,
@@ -429,7 +429,7 @@
    "group": "PowerVR",
    "title": "reicast gles.cpp",
    "lane": "reicast",
-   "frame": 42,
+   "frame": 351,
    "date": "2013-12-19",
    "path": "newdc/rend/gles/gles.cpp",
    "line": 0,
@@ -439,7 +439,7 @@
    "group": "PowerVR",
    "title": "refsw (nullDC 3 2023)",
    "lane": "nulldc3",
-   "frame": 188,
+   "frame": 595,
    "date": "2023-07-07",
    "path": "libswirl/rend/soft/refsw.cpp",
    "line": 0,
@@ -449,7 +449,7 @@
    "group": "PowerVR",
    "title": "refsw2 tile",
    "lane": "nulldc3",
-   "frame": 371,
+   "frame": 1250,
    "date": "2026-10-25",
    "path": "libswirl/rend/refsw2/refsw_tile.cpp",
    "line": 0,
@@ -459,7 +459,7 @@
    "group": "PowerVR",
    "title": "refsw3 refcore tile",
    "lane": "nulldc3",
-   "frame": 389,
+   "frame": 1434,
    "date": "2026-11-20",
    "path": "refsw3/refcore/refsw_tile.cpp",
    "line": 0,
@@ -469,7 +469,7 @@
    "group": "FPGA",
    "title": "polly2 r6b peel_core",
    "lane": "polly2",
-   "frame": 367,
+   "frame": 1244,
    "date": "2026-10-24",
    "path": "polly2-core/rtl/peel_core.sv",
    "line": 0,
@@ -479,7 +479,7 @@
    "group": "FPGA",
    "title": "polly2 r8 ref_copies.h (refsw3 C++ copy)",
    "lane": "polly2-r8",
-   "frame": 393,
+   "frame": 1470,
    "date": "2026-11-21",
    "path": "tb/ref/ref_copies.h",
    "line": 0,
@@ -489,7 +489,7 @@
    "group": "FPGA",
    "title": "polly2 r8 ref_copies_setup.h (refsw3 C++ copy)",
    "lane": "polly2-r8",
-   "frame": 393,
+   "frame": 1470,
    "date": "2026-11-21",
    "path": "tb/isp_setup/ref_copies_setup.h",
    "line": 0,
@@ -499,7 +499,7 @@
    "group": "FPGA",
    "title": "shrike4 v1_core",
    "lane": "shrike4",
-   "frame": 375,
+   "frame": 1255,
    "date": "2026-10-31",
    "path": "rtl/v1/v1_core.sv",
    "line": 0,
@@ -509,7 +509,7 @@
    "group": "FPGA",
    "title": "caique aica_core",
    "lane": "caique",
-   "frame": 377,
+   "frame": 1258,
    "date": "2026-11-01",
    "path": "rtl/v1/aica_core.sv",
    "line": 0,
@@ -519,7 +519,7 @@
    "group": "FPGA",
    "title": "wren7 core",
    "lane": "wren7",
-   "frame": 378,
+   "frame": 1259,
    "date": "2026-11-01",
    "path": "rtl/v1/wren7_core.sv",
    "line": 0,
@@ -529,7 +529,7 @@
    "group": "Ports 2021",
    "title": "nullDCe-PSP SH4 to MIPS JIT",
    "lane": "nullDCe-PSP",
-   "frame": 161,
+   "frame": 557,
    "date": "2021-10-17",
    "path": "psp/dc/sh4/rec_v2/psp_driver.cpp",
    "line": 0,
@@ -539,7 +539,7 @@
    "group": "Ports 2026",
    "title": "nullDC4WiiU Wii U main",
    "lane": "nullDC4WiiU",
-   "frame": 394,
+   "frame": 1471,
    "date": "2026-11-22",
    "path": "wiiu/main_wiiu.cpp",
    "line": 0,
@@ -549,7 +549,7 @@
    "group": "Ports 2026",
    "title": "HarissaDC SH4 PowerPC JIT",
    "lane": "HarissaDC",
-   "frame": 388,
+   "frame": 1426,
    "date": "2026-11-20",
    "path": "src/sh4/sh4_jit.cpp",
    "line": 0,
@@ -559,7 +559,7 @@
    "group": "Cross-lane copies",
    "title": "NotDC-PS3 caiqueAICA",
    "lane": "NotDC-PS3",
-   "frame": 376,
+   "frame": 1256,
    "date": "2026-11-01",
    "path": "plugs/caiqueAICA/aica_model.cpp",
    "line": 0,
@@ -569,7 +569,7 @@
    "group": "Cross-lane copies",
    "title": "devtools aica_dsp_playground dsp.h",
    "lane": "devtools",
-   "frame": 368,
+   "frame": 1245,
    "date": "2026-10-24",
    "path": "experiments/aica_dsp_playground/dsp/dsp.h",
    "line": 0,
@@ -579,7 +579,7 @@
    "group": "Oddities",
    "title": "fsca-table.h (4096 rows)",
    "lane": "nulldc3",
-   "frame": 389,
+   "frame": 1434,
    "date": "2026-11-20",
    "path": "libswirl/hw/sh4/fsca-table.h",
    "line": 0,
@@ -589,7 +589,7 @@
    "group": "Oddities",
    "title": "naomi_roms.cpp (longest file)",
    "lane": "flycast",
-   "frame": 395,
+   "frame": 1472,
    "date": "2026-11-22",
    "path": "core/hw/naomi/naomi_roms.cpp",
    "line": 0,
@@ -599,7 +599,7 @@
    "group": "Oddities",
    "title": "and here are the new ones :D",
    "lane": "flycast",
-   "frame": 395,
+   "frame": 1472,
    "date": "2026-11-22",
    "path": "core/hw/sh4/sh4_opcode_list.cpp",
    "line": 0,

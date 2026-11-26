@@ -147,7 +147,7 @@ export function initUI(V) {
       const t = (await V.lineText([r.id]))[0]; if (req !== tipReq) return;
       h += `<pre>${esc(t ?? '(text loading)')}</pre>`;
       const o = r.origin, ofr = F.frames[o];
-      if (r.keep === 511) h += `<span class="small">line ${r.line}: trivial (blank / brackets); coloured as the file</span>`;
+      if (r.keep === 2047) h += `<span class="small">line ${r.line}: trivial (blank / brackets); coloured as the file</span>`;
       else {
         const poss = F.possible[o] ? F.possible[o][w.lane] : 0;
         h += `<span class="small">line ${r.line} | first seen: <b>${esc(V.palette.originName(o))}</b>${ofr.virtual ? ' (2005-2008)' : ''} | kept in ${r.keep} of ${poss} later frames that could hold it${r.flags & 2 ? ' | added in this frame' : ''}${r.flags & 1 ? ' | incidental match' : ''}</span>`;
